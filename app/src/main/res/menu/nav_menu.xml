@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/baseline_home_24"
+        android:title="Home"/>
+
+    <item android:id="@+id/nav_settings"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="Settings"/>
+
+    <item android:title="Data">
+        <menu>
+            <item
+                android:id="@+id/nav_history"
+                android:icon="@drawable/baseline_table_rows_24"
+                android:title="History"/>
+
+            <item
+                android:id="@+id/nav_calender"
+                android:icon="@drawable/baseline_calendar_month_24"
+                android:title="Calender"/>
+
+            <item
+                android:id="@+id/nav_overview"
+                android:icon="@drawable/baseline_insert_chart_24"
+                android:title="Overview"/>
+            <item
+                android:id="@+id/nav_startendtimes"
+                android:icon="@drawable/baseline_timelapse_24"
+                android:title="Start End-Times"/>
+        </menu>
+    </item>
+
+    <item android:title="Entry">
+        <menu>
+            <item
+                android:id="@+id/nav_entry"
+                android:title="New"
+                android:icon="@drawable/baseline_create_new_folder_24"/>
+
+            <item
+                android:id="@+id/nav_trash"
+                android:title="Delete"
+                android:icon="@drawable/baseline_delete_24"/>
+        </menu>
+    </item>
+
+    <item android:title="Information">
+        <menu>
+            <item
+                android:id="@+id/nav_version"
+                android:icon="@drawable/baseline_info_24"
+                android:title="Version"/>
+
+            <item
+                android:id="@+id/nav_link"
+                android:icon="@drawable/baseline_code_24"
+                android:title="Source Code"/>
+        </menu>
+    </item>
+
+</menu>

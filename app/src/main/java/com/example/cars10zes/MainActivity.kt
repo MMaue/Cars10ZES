@@ -1,12 +1,21 @@
 package com.example.cars10zes
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.SavedStateHandle
+import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputEditText
 import java.text.SimpleDateFormat
 import java.time.Duration
@@ -24,11 +33,35 @@ import kotlin.time.Duration as Duration_kt
 
 
 class MainActivity : AppCompatActivity() {
+
+    lateinit var toggle: ActionBarDrawerToggle
+
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // navigation menu start
+        val drawerLayout : DrawerLayout = findViewById(R.id.drawerLayout)
+        val navView : NavigationView = findViewById(R.id.nav_view)
+
+        toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open,R.string.close)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        navView.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.nav_home -> Toast.makeText(applicationContext, "Clicked Home", Toast.LENGTH_SHORT).show()
+
+                R.id.nav_version -> Toast.makeText(applicationContext, "0.1.1", Toast.LENGTH_SHORT).show()
+                R.id.nav_link -> openWebPage("https://github.com/MMaue")
+            }
+            true
+        }
+        // navigation menu end
 
         var start_datetime = LocalDateTime.now()
         var end_datetime: LocalDateTime
@@ -135,5 +168,18 @@ class MainActivity : AppCompatActivity() {
             button_pause_end.isEnabled = false
             button_session_start.isEnabled = false
         }
+    }
+
+    fun openWebPage(urls: String) {
+        val uris = Uri.parse(urls)
+        val intents = Intent(Intent.ACTION_VIEW, uris)
+        startActivity(intents)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (toggle.onOptionsItemSelected(item)){
+            return true
+            }
+        return super.onOptionsItemSelected(item)
     }
 }
