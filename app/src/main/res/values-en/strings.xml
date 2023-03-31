@@ -23,5 +23,5 @@
     <string name="title_deleteentry">delete</string>
     <string name="title_group_info">information</string>
     <string name="title_version">version</string>
-    <string name="title_sourcecode">source code</string>
+    <string name="toast_home_missing_data">please insert name and project</string>
 </resources>

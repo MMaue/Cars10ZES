@@ -24,4 +24,5 @@
     <string name="title_group_info">Informationen</string>
     <string name="title_version">Version</string>
     <string name="title_sourcecode">Quell Code</string>
+    <string name="toast_home_missing_data">Bitte Projekt und Name eingeben</string>
 </resources>
