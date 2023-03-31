@@ -18,7 +18,7 @@
         app:layout_constraintVertical_bias="0.135"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="session:"
+        android:text="@string/text_home_session"
         android:textColor="@color/text_1"
         android:textSize="16sp"
         tools:layout_editor_absoluteX="127dp"
@@ -34,7 +34,7 @@
         app:layout_constraintVertical_bias="0.076"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="pause:"
+        android:text="@string/text_home_pause"
         android:textColor="@color/text_1"
         android:textSize="16sp"
         tools:layout_editor_absoluteX="16dp"
@@ -72,7 +72,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="32dp"
-        android:hint="Name"
+        android:hint="@string/hint_home_user"
         android:textColorHint="@color/text_1"
         app:startIconDrawable="@drawable/baseline_person_24"
         app:counterEnabled="true"
@@ -99,7 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:hint="Project"
+        android:hint="@string/hint_home_project"
         android:textColorHint="@color/text_1"
         app:counterEnabled="true"
         app:counterMaxLength="32"
@@ -130,7 +130,7 @@
         app:layout_constraintVertical_bias="0.306"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start"
+        android:text="@string/button_home_start"
         tools:layout_editor_absoluteX="39dp"
         tools:layout_editor_absoluteY="191dp" />
 
@@ -144,7 +144,7 @@
         app:layout_constraintVertical_bias="0.306"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="End"
+        android:text="@string/button_home_end"
         tools:layout_editor_absoluteX="262dp"
         tools:layout_editor_absoluteY="191dp" />
 
@@ -158,7 +158,7 @@
         app:layout_constraintVertical_bias="0.2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start"
+        android:text="@string/button_home_start"
         tools:layout_editor_absoluteX="119dp"
         tools:layout_editor_absoluteY="570dp" />
 
@@ -172,7 +172,7 @@
         app:layout_constraintVertical_bias="0.2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="End"
+        android:text="@string/button_home_end"
         tools:layout_editor_absoluteX="307dp"
         tools:layout_editor_absoluteY="581dp" />
 
@@ -186,7 +186,7 @@
         app:layout_constraintVertical_bias="0.542"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="time"
+        android:text="@string/text_home_time_default"
         tools:layout_editor_absoluteX="218dp"
         tools:layout_editor_absoluteY="383dp" />
 
@@ -200,7 +200,7 @@
         app:layout_constraintVertical_bias="0.915"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="time"
+        android:text="@string/text_home_time_default"
         tools:layout_editor_absoluteX="168dp"
         tools:layout_editor_absoluteY="364dp" />
 
@@ -223,7 +223,7 @@
         app:layout_constraintVertical_bias="0.437"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="time"
+        android:text="@string/text_home_time_default"
         tools:layout_editor_absoluteX="99dp"
         tools:layout_editor_absoluteY="383dp" />
 
@@ -237,7 +237,7 @@
         app:layout_constraintVertical_bias="0.79"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="time"
+        android:text="@string/text_home_time_default"
         tools:layout_editor_absoluteX="52dp"
         tools:layout_editor_absoluteY="248dp" />
 

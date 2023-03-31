@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
                 android:textSize="18sp"
-                android:text="@string/home_fragment_title"
+                android:text="@string/title_home"
                 android:textStyle="bold"/>
 
             <TextView
@@ -40,7 +40,7 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:contentDescription="App Icon"
+            android:contentDescription="@string/title_home"
             android:scaleType="fitStart"
             android:layout_marginStart="16dp"
             app:srcCompat="@drawable/_0230115_215823" />

@@ -8,67 +8,67 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/baseline_home_24"
-        android:title="Home"/>
+        android:title="@string/title_home"/>
 
     <item android:id="@+id/nav_settings"
         android:icon="@drawable/baseline_settings_24"
-        android:title="Settings"/>
+        android:title="@string/title_settings"/>
 
     </group>
 
-    <item android:title="Data">
+    <item android:title="@string/title_group_data">
         <menu>
             <group android:checkableBehavior="single">
             <item
                 android:id="@+id/nav_history"
                 android:icon="@drawable/baseline_table_rows_24"
-                android:title="History"/>
+                android:title="@string/title_history"/>
 
             <item
                 android:id="@+id/nav_calendar"
                 android:icon="@drawable/baseline_calendar_month_24"
-                android:title="Calendar"/>
+                android:title="@string/title_calendar"/>
 
             <item
                 android:id="@+id/nav_overview"
                 android:icon="@drawable/baseline_insert_chart_24"
-                android:title="Overview"/>
+                android:title="@string/title_overview"/>
             <item
                 android:id="@+id/nav_startendtimes"
                 android:icon="@drawable/baseline_timelapse_24"
-                android:title="Start End-Times"/>
+                android:title="@string/title_startendtimes"/>
             </group>
         </menu>
     </item>
 
-    <item android:title="Entry">
+    <item android:title="@string/title_group_entry">
         <menu>
             <group android:checkableBehavior="single">
             <item
                 android:id="@+id/nav_entry"
-                android:title="New"
+                android:title="@string/title_newentry"
                 android:icon="@drawable/baseline_create_new_folder_24"/>
 
             <item
                 android:id="@+id/nav_trash"
-                android:title="Delete"
+                android:title="@string/title_deleteentry"
                 android:icon="@drawable/baseline_delete_24"/>
             </group>
         </menu>
     </item>
 
-    <item android:title="Information">
+    <item android:title="@string/title_group_info">
         <menu>
             <group android:checkableBehavior="none">
             <item
                 android:id="@+id/nav_version"
                 android:icon="@drawable/baseline_info_24"
-                android:title="Version"/>
+                android:title="@string/title_version"/>
 
             <item
                 android:id="@+id/nav_link"
                 android:icon="@drawable/baseline_code_24"
-                android:title="Source Code"/>
+                android:title="@string/title_sourcecode"/>
             </group>
         </menu>
     </item>
