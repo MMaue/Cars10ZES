@@ -2,7 +2,7 @@
     <string name="app_name">Cars10ZES</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="hello_blank_fragment">Not yet implemented</string>
+    <string name="hello_blank_fragment">not yet implemented</string>
 
     <string name="title_home">Zeiterfassung</string>
     <string name="button_home_start">Start</string>
@@ -25,6 +25,6 @@
     <string name="title_group_info">Information</string>
     <string name="title_version">Version</string>
     <string name="title_sourcecode">Source Code</string>
-    <string name="source_code_link">https://github.com/MMaue/Cars10ZES</string>
+    <string name="source_code_link" translatable="false">https://github.com/MMaue/Cars10ZES</string>
 
 </resources>

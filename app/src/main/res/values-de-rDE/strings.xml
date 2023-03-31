@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cars10ZES</string>
+    <string name="open">Öffnen</string>
+    <string name="close">Schließen</string>
+    <string name="hello_blank_fragment">noch nicht Implementiert</string>
+    <string name="title_home">Zeiterfassung</string>
+    <string name="button_home_start">Start</string>
+    <string name="button_home_end">Ende</string>
+    <string name="text_home_session">session:</string>
+    <string name="text_home_pause">pause:</string>
+    <string name="hint_home_user">Name</string>
+    <string name="hint_home_project">Projekt</string>
+    <string name="text_home_time_default">Zeit</string>
+    <string name="title_settings">Einstellungen</string>
+    <string name="title_group_data">Daten</string>
+    <string name="title_history">Verlauf</string>
+    <string name="title_calendar">Kalender</string>
+    <string name="title_overview">Übersicht</string>
+    <string name="title_startendtimes">StartEnd-Zeiten</string>
+    <string name="title_group_entry">Eintrag</string>
+    <string name="title_newentry">Neu</string>
+    <string name="title_deleteentry">Löschen</string>
+    <string name="title_group_info">Informationen</string>
+    <string name="title_version">Version</string>
+    <string name="title_sourcecode">Quell Code</string>
+</resources>

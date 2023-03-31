@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cars10TT</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="hello_blank_fragment">not yet implemented</string>
+    <string name="title_home">TimeTracking</string>
+    <string name="button_home_start">start</string>
+    <string name="button_home_end">end</string>
+    <string name="text_home_session">session:</string>
+    <string name="text_home_pause">pause:</string>
+    <string name="hint_home_user">name</string>
+    <string name="hint_home_project">project</string>
+    <string name="text_home_time_default">time</string>
+    <string name="title_settings">settings</string>
+    <string name="title_group_data">data</string>
+    <string name="title_history">history</string>
+    <string name="title_calendar">calendar</string>
+    <string name="title_overview">overview</string>
+    <string name="title_startendtimes">start end-times</string>
+    <string name="title_group_entry">entry</string>
+    <string name="title_newentry">new</string>
+    <string name="title_deleteentry">delete</string>
+    <string name="title_group_info">information</string>
+    <string name="title_version">version</string>
+    <string name="title_sourcecode">source code</string>
+</resources>
