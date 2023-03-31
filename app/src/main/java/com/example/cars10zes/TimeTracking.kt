@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 class TimeTracking : Serializable {
+    //TODO use datastore to save name project or settings
     private var startDatetime: LocalDateTime = LocalDateTime.now()
     private var endDatetime: LocalDateTime = LocalDateTime.now()
     private var startPauseDatetime: LocalDateTime = LocalDateTime.now()
@@ -18,15 +19,24 @@ class TimeTracking : Serializable {
     private var diff = Duration.between(startDatetime, endDatetime)
     private var diffPause = Duration.between(startPauseDatetime, startPauseDatetime)
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS") // "yyyy-MM-dd HH:mm:ss.SSS" // change later to HH:mm
+    var status = 0
 
-    fun startSession(): String {
+    fun startSession() {
+        status = 1
         startDatetime = LocalDateTime.now()
+    }
+
+    fun getSessionStartTime(): String {
         return startDatetime.format(formatter)
     }
 
-    fun endSession(): String {
+    fun endSession() {
+        status = 4
         endDatetime = LocalDateTime.now()
         diff = Duration.between(startDatetime, endDatetime)
+    }
+
+    fun getSessionEndTime(): String {
         return endDatetime.format(formatter)
     }
 
@@ -38,14 +48,22 @@ class TimeTracking : Serializable {
         return formatDuration(diff.seconds-diffPause.seconds)
     }
 
-    fun startPause(): String {
+    fun startPause() {
+        status = 2
         startPauseDatetime = LocalDateTime.now()
+    }
+
+    fun getPauseStartTime(): String {
         return startPauseDatetime.format(formatter)
     }
 
-    fun endPause(): String {
+    fun endPause() {
+        status = 3
         endPauseDatetime = LocalDateTime.now()
         diffPause = Duration.between(startPauseDatetime, endPauseDatetime)
+    }
+
+    fun getPauseEndTime(): String {
         return endPauseDatetime.format(formatter)
     }
 

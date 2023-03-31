@@ -39,12 +39,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val textGesTime = view.findViewById<TextView>(R.id.text_ges_time)
 
-        buttonSessionEnd.isEnabled = false
-        buttonPauseStart.isEnabled = false
-        buttonPauseEnd.isEnabled = false
-
         buttonSessionStart.setOnClickListener {
-            textSessionStartTime.text = timeTracking.startSession()
+            timeTracking.startSession()
+            textSessionStartTime.text = timeTracking.getSessionStartTime()
             buttonSessionEnd.isEnabled = true
             buttonPauseStart.isEnabled = true
             buttonPauseEnd.isEnabled = false
@@ -52,7 +49,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         buttonSessionEnd.setOnClickListener {
-            textSessionEndTime.text = timeTracking.endSession()
+            timeTracking.endSession()
+            textSessionEndTime.text = timeTracking.getSessionEndTime()
             textSessionDiffTime.text = timeTracking.getSessionDuration()
             textGesTime.text = timeTracking.getSessionWorkingTime()
             buttonSessionEnd.isEnabled = false
@@ -62,7 +60,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         buttonPauseStart.setOnClickListener {
-            textPauseStartTime.text = timeTracking.startPause()
+            timeTracking.startPause()
+            textPauseStartTime.text = timeTracking.getPauseStartTime()
             buttonSessionEnd.isEnabled = false
             buttonPauseStart.isEnabled = false
             buttonPauseEnd.isEnabled = true
@@ -70,12 +69,61 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         buttonPauseEnd.setOnClickListener {
-            textPauseEndTime.text =  timeTracking.endPause()
+            timeTracking.endPause()
+            textPauseEndTime.text =  timeTracking.getPauseEndTime()
             textPauseDiffTime.text = timeTracking.getPauseDuration()
             buttonSessionEnd.isEnabled = true
             buttonPauseStart.isEnabled = false
             buttonPauseEnd.isEnabled = false
             buttonSessionStart.isEnabled = false
+        }
+
+        // restore last state
+        when(timeTracking.status){
+            0 -> {
+                buttonSessionStart.isEnabled = true
+                buttonSessionEnd.isEnabled = false
+                buttonPauseStart.isEnabled = false
+                buttonPauseEnd.isEnabled = false
+            }
+            1 -> {
+                textSessionStartTime.text = timeTracking.getSessionStartTime()
+                buttonSessionStart.isEnabled = false
+                buttonSessionEnd.isEnabled = true
+                buttonPauseStart.isEnabled = true
+                buttonPauseEnd.isEnabled = false
+            }
+            2 -> {
+                textPauseStartTime.text = timeTracking.getPauseStartTime()
+                buttonSessionEnd.isEnabled = false
+                buttonPauseStart.isEnabled = false
+                buttonPauseEnd.isEnabled = true
+                buttonSessionStart.isEnabled = false
+                textSessionStartTime.text = timeTracking.getSessionStartTime()
+            }
+            3 -> {
+                textPauseEndTime.text =  timeTracking.getPauseEndTime()
+                textPauseDiffTime.text = timeTracking.getPauseDuration()
+                buttonSessionEnd.isEnabled = true
+                buttonPauseStart.isEnabled = false
+                buttonPauseEnd.isEnabled = false
+                buttonSessionStart.isEnabled = false
+                textSessionStartTime.text = timeTracking.getSessionStartTime()
+                textPauseStartTime.text = timeTracking.getPauseStartTime()
+            }
+            4 -> {
+                textSessionEndTime.text = timeTracking.getSessionEndTime()
+                textSessionDiffTime.text = timeTracking.getSessionDuration()
+                textGesTime.text = timeTracking.getSessionWorkingTime()
+                buttonSessionEnd.isEnabled = false
+                buttonPauseStart.isEnabled = false
+                buttonPauseEnd.isEnabled = false
+                buttonSessionStart.isEnabled = true
+                textSessionStartTime.text = timeTracking.getSessionStartTime()
+                textPauseStartTime.text = timeTracking.getPauseStartTime()
+                textPauseEndTime.text =  timeTracking.getPauseEndTime()
+                textPauseDiffTime.text = timeTracking.getPauseDuration()
+            }
         }
     }
 }
