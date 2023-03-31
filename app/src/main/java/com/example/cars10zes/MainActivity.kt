@@ -1,38 +1,15 @@
 package com.example.cars10zes
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.SavedStateHandle
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.textfield.TextInputEditText
-import java.text.SimpleDateFormat
-import java.time.Duration
-import java.time.LocalDateTime
-import java.time.Period
-import java.time.format.DateTimeFormatter
-import java.util.*
-import kotlin.time.toKotlinDuration
-import kotlin.time.Duration as Duration_kt
-import com.example.cars10zes.BuildConfig
-
-
-
-//TODO local sqlite db
-// feature to add manuel entries
-// feature to view history
 
 
 class MainActivity : AppCompatActivity() {
@@ -48,14 +25,26 @@ class MainActivity : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawerLayout)
         val navView : NavigationView = findViewById(R.id.nav_view)
 
+        val timeTracking = TimeTracking()
+        val bundle = Bundle()
+        bundle.putSerializable("data", timeTracking)
+
         val homeFragment = HomeFragment()
+        homeFragment.arguments = bundle
         val settingsFragment = SettingsFragment()
+        settingsFragment.arguments = bundle
         val historyFragment = HistoryFragment()
+        historyFragment.arguments = bundle
         val calendarFragment = CalendarFragment()
+        calendarFragment.arguments = bundle
         val overviewFragment = OverviewFragment()
+        overviewFragment.arguments = bundle
         val startEndTimesFragment = StartEndTimesFragment()
+        startEndTimesFragment.arguments = bundle
         val newEntryFragment = NewEntryFragment()
+        newEntryFragment.arguments = bundle
         val deleteEntryFragment = DeleteEntryFragment()
+        deleteEntryFragment.arguments = bundle
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open,R.string.close)
         drawerLayout.addDrawerListener(toggle)
@@ -66,9 +55,14 @@ class MainActivity : AppCompatActivity() {
         navView.setNavigationItemSelectedListener {
             it.isChecked = true
             when(it.itemId){
-                R.id.nav_home -> replaceFragment(homeFragment, getString(R.string.home_fragment_title))
+                R.id.nav_home -> replaceFragment(homeFragment, it.title.toString())
                 R.id.nav_settings -> replaceFragment(settingsFragment, it.title.toString())
                 R.id.nav_history -> replaceFragment(historyFragment, it.title.toString())
+                R.id.nav_calendar -> replaceFragment(calendarFragment, it.title.toString())
+                R.id.nav_overview -> replaceFragment(overviewFragment, it.title.toString())
+                R.id.nav_startendtimes -> replaceFragment(startEndTimesFragment, it.title.toString())
+                R.id.nav_entry -> replaceFragment(newEntryFragment, it.title.toString())
+                R.id.nav_trash -> replaceFragment(deleteEntryFragment, it.title.toString())
 
                 R.id.nav_version -> Toast.makeText(applicationContext, BuildConfig.VERSION_NAME, Toast.LENGTH_SHORT).show()
                 R.id.nav_link -> openWebPage(getString(R.string.source_code_link))
@@ -76,12 +70,10 @@ class MainActivity : AppCompatActivity() {
             true
         }
         // navigation menu end
-
-        replaceFragment(homeFragment, getString(R.string.home_fragment_title))
-        title = getString(R.string.home_fragment_title)
+        replaceFragment(homeFragment, getString(R.string.title_home))
     }
 
-    fun openWebPage(urls: String) {
+    private fun openWebPage(urls: String) {
         val uris = Uri.parse(urls)
         val intents = Intent(Intent.ACTION_VIEW, uris)
         startActivity(intents)
