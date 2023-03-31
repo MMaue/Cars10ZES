@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.SavedStateHandle
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputEditText
@@ -25,6 +26,8 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.time.toKotlinDuration
 import kotlin.time.Duration as Duration_kt
+import com.example.cars10zes.BuildConfig
+
 
 
 //TODO local sqlite db
@@ -35,16 +38,24 @@ import kotlin.time.Duration as Duration_kt
 class MainActivity : AppCompatActivity() {
 
     lateinit var toggle: ActionBarDrawerToggle
+    lateinit var drawerLayout: DrawerLayout
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         // navigation menu start
-        val drawerLayout : DrawerLayout = findViewById(R.id.drawerLayout)
+        drawerLayout = findViewById(R.id.drawerLayout)
         val navView : NavigationView = findViewById(R.id.nav_view)
+
+        val homeFragment = HomeFragment()
+        val settingsFragment = SettingsFragment()
+        val historyFragment = HistoryFragment()
+        val calendarFragment = CalendarFragment()
+        val overviewFragment = OverviewFragment()
+        val startEndTimesFragment = StartEndTimesFragment()
+        val newEntryFragment = NewEntryFragment()
+        val deleteEntryFragment = DeleteEntryFragment()
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open,R.string.close)
         drawerLayout.addDrawerListener(toggle)
@@ -53,127 +64,37 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         navView.setNavigationItemSelectedListener {
+            it.isChecked = true
             when(it.itemId){
-                R.id.nav_home -> Toast.makeText(applicationContext, "Clicked Home", Toast.LENGTH_SHORT).show()
+                R.id.nav_home -> replaceFragment(homeFragment, getString(R.string.home_fragment_title))
+                R.id.nav_settings -> replaceFragment(settingsFragment, it.title.toString())
+                R.id.nav_history -> replaceFragment(historyFragment, it.title.toString())
 
-                R.id.nav_version -> Toast.makeText(applicationContext, "0.1.1", Toast.LENGTH_SHORT).show()
-                R.id.nav_link -> openWebPage("https://github.com/MMaue")
+                R.id.nav_version -> Toast.makeText(applicationContext, BuildConfig.VERSION_NAME, Toast.LENGTH_SHORT).show()
+                R.id.nav_link -> openWebPage(getString(R.string.source_code_link))
             }
             true
         }
         // navigation menu end
 
-        var start_datetime = LocalDateTime.now()
-        var end_datetime: LocalDateTime
-        var start_pause_datetime = LocalDateTime.now()
-        var end_pause_datetime: LocalDateTime
-
-        val pause_init = Duration.between(start_pause_datetime, start_pause_datetime)
-        var sec_pause = pause_init.seconds
-        val formatter = DateTimeFormatter.ofPattern("HH:mm") // "yyyy-MM-dd HH:mm:ss.SSS"
-        val sec_pro_min = 60
-        val sec_pro_hour = 60*sec_pro_min
-        //var formatted = start_datetime.format(formatter)
-        //println("Current Date and Time is: ${start_datetime.format(formatter)}")
-
-        val button_session_start = findViewById<Button>(R.id.button_session_start)
-        val button_session_end = findViewById<Button>(R.id.button_session_end)
-
-        val button_pause_start = findViewById<Button>(R.id.button_pause_start)
-        val button_pause_end = findViewById<Button>(R.id.button_pause_end)
-
-        val input_user = findViewById<TextInputEditText>(R.id.input_user)
-        val input_project = findViewById<TextInputEditText>(R.id.input_project)
-
-        val text_session_start_time = findViewById<TextView>(R.id.text_session_start_time)
-        val text_session_end_time = findViewById<TextView>(R.id.text_session_end_time)
-        val text_session_diff_time = findViewById<TextView>(R.id.text_session_diff_time)
-        val text_pause_start_time = findViewById<TextView>(R.id.text_pause_start_time)
-        val text_pause_end_time = findViewById<TextView>(R.id.text_pause_end_time)
-        val text_pause_diff_time = findViewById<TextView>(R.id.text_pause_diff_time)
-
-        val text_ges_time = findViewById<TextView>(R.id.text_ges_time)
-
-        button_session_end.isEnabled = false
-        button_pause_start.isEnabled = false
-        button_pause_end.isEnabled = false
-
-        button_session_start.setOnClickListener {
-            start_datetime = LocalDateTime.now()
-            //println("Current Date and Time is: ${start_datetime.format(formatter)}")
-            text_session_start_time.text = start_datetime.format(formatter)
-
-            button_session_end.isEnabled = true
-            button_pause_start.isEnabled = true
-            button_pause_end.isEnabled = false
-            button_session_start.isEnabled = false
-        }
-
-        button_session_end.setOnClickListener {
-            end_datetime = LocalDateTime.now()
-            val diff = Duration.between(start_datetime, end_datetime)
-
-            var s = diff.seconds
-            val h = s / sec_pro_hour;
-            s -= h * sec_pro_hour;
-            val m = s / sec_pro_min;
-            s -= m * sec_pro_min;
-
-            val diff_concat = "$h:$m:$s"
-            text_session_diff_time.text = diff_concat
-            text_session_end_time.text =  end_datetime.format(formatter)
-
-            button_session_end.isEnabled = false
-            button_pause_start.isEnabled = false
-            button_pause_end.isEnabled = false
-            button_session_start.isEnabled = true
-
-            var sg = diff.seconds-sec_pause
-            val hg = sg / sec_pro_hour;
-            sg -= hg * sec_pro_hour;
-            val mg = sg / sec_pro_min;
-            sg -= mg * sec_pro_min;
-
-            val ges_concat = "$hg:$mg:$sg"
-            text_ges_time.text = ges_concat
-        }
-
-        button_pause_start.setOnClickListener {
-            start_pause_datetime = LocalDateTime.now()
-            text_pause_start_time.text = start_pause_datetime.format(formatter)
-
-            button_session_end.isEnabled = false
-            button_pause_start.isEnabled = false
-            button_pause_end.isEnabled = true
-            button_session_start.isEnabled = false
-        }
-
-        button_pause_end.setOnClickListener {
-            end_pause_datetime = LocalDateTime.now()
-            val diff = Duration.between(start_pause_datetime, end_pause_datetime)
-
-            var s = diff.seconds
-            sec_pause = s
-            val h = s / sec_pro_hour;
-            s -= h * sec_pro_hour;
-            val m = s / sec_pro_min;
-            s -= m * sec_pro_min;
-
-            val diff_concat = "$h:$m:$s"
-            text_pause_diff_time.text = diff_concat
-            text_pause_end_time.text =  end_pause_datetime.format(formatter)
-
-            button_session_end.isEnabled = true
-            button_pause_start.isEnabled = false
-            button_pause_end.isEnabled = false
-            button_session_start.isEnabled = false
-        }
+        replaceFragment(homeFragment, getString(R.string.home_fragment_title))
+        title = getString(R.string.home_fragment_title)
     }
 
     fun openWebPage(urls: String) {
         val uris = Uri.parse(urls)
         val intents = Intent(Intent.ACTION_VIEW, uris)
         startActivity(intents)
+    }
+
+    private fun replaceFragment(fragment: Fragment, title: String){
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.frameLayout, fragment)
+            addToBackStack(null)
+            commit()
+        }
+        drawerLayout.closeDrawers()
+        setTitle(title)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -2,4 +2,7 @@
     <string name="app_name">Cars10ZES</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="hello_blank_fragment">Blank Frag Hello</string>
+    <string name="source_code_link">https://github.com/MMaue/Cars10ZES</string>
+    <string name="home_fragment_title">Zeiterfassung</string>
 </resources>
