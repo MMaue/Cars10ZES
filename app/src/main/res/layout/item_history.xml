@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/background"
-    android:padding="5dp">
+    android:padding="0dp">
 
     <TextView
         android:id="@+id/text_project"
@@ -14,8 +14,8 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:text="projectname"
-        android:textSize="20sp"
         android:textColor="@color/text_1"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,8 +28,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
         android:text="username"
-        android:textSize="16sp"
         android:textColor="@color/blue_2"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_project" />
@@ -38,45 +38,55 @@
         android:id="@+id/text_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:text="01.01.1970"
-        android:textSize="18sp"
         android:textColor="@color/blue_1"
-        app:layout_constraintStart_toEndOf="@+id/text_project"
-        app:layout_constraintTop_toTopOf="@+id/text_project" />
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/text_start"
+        app:layout_constraintTop_toTopOf="@+id/text_start" />
 
     <TextView
         android:id="@+id/text_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:text="00:00"
-        android:textSize="18sp"
         android:textColor="@color/blue_1_darker"
-        app:layout_constraintStart_toEndOf="@+id/text_date"
-        app:layout_constraintTop_toTopOf="@+id/text_date" />
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/text_duration"
+        app:layout_constraintTop_toTopOf="@+id/text_duration" />
 
     <TextView
         android:id="@+id/text_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
         android:text="00:00"
-        android:textSize="18sp"
         android:textColor="@color/blue_1_darker"
-        app:layout_constraintStart_toEndOf="@+id/text_date"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/text_duration"
         app:layout_constraintTop_toBottomOf="@+id/text_start" />
 
     <TextView
         android:id="@+id/text_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
         android:text="00:00:00"
-        android:textSize="20sp"
         android:textColor="@color/text_positive"
-        app:layout_constraintStart_toEndOf="@+id/text_start"
-        app:layout_constraintTop_toTopOf="@+id/text_start" />
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/blue_3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
