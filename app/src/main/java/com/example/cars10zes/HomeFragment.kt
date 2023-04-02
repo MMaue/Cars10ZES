@@ -81,7 +81,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             textPauseEndTime.text =  timeTracking.getPauseEndTime()
             textPauseDiffTime.text = timeTracking.getPauseDuration()
             buttonSessionEnd.isEnabled = true
-            buttonPauseStart.isEnabled = false
+            buttonPauseStart.isEnabled = true
             buttonPauseEnd.isEnabled = false
             buttonSessionStart.isEnabled = false
         }
@@ -113,7 +113,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 textPauseEndTime.text =  timeTracking.getPauseEndTime()
                 textPauseDiffTime.text = timeTracking.getPauseDuration()
                 buttonSessionEnd.isEnabled = true
-                buttonPauseStart.isEnabled = false
+                buttonPauseStart.isEnabled = true
                 buttonPauseEnd.isEnabled = false
                 buttonSessionStart.isEnabled = false
                 textSessionStartTime.text = timeTracking.getSessionStartTime()

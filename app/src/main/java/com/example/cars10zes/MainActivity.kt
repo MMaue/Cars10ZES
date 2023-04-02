@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawerLayout)
         val navView : NavigationView = findViewById(R.id.nav_view)
 
-        val timeTracking = TimeTracking()
+        val timeTracking = TimeTracking(applicationContext)
         val bundle = Bundle()
         bundle.putSerializable("data", timeTracking)
 

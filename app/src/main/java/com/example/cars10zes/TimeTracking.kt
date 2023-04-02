@@ -1,5 +1,6 @@
 package com.example.cars10zes
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import java.io.Serializable
@@ -9,21 +10,31 @@ import java.time.format.DateTimeFormatter
 
 
 @RequiresApi(Build.VERSION_CODES.O)
-class TimeTracking : Serializable {
+class TimeTracking(context: Context): Serializable {
     //TODO use datastore to save name project or settings
     private var startDatetime: LocalDateTime = LocalDateTime.now()
-    private var endDatetime: LocalDateTime = LocalDateTime.now()
-    private var startPauseDatetime: LocalDateTime = LocalDateTime.now()
-    private var endPauseDatetime: LocalDateTime = LocalDateTime.now()
+    private lateinit var endDatetime: LocalDateTime
+    private lateinit var startPauseDatetime: LocalDateTime
+    private lateinit var endPauseDatetime: LocalDateTime
 
-    private var diff = Duration.between(startDatetime, endDatetime)
-    private var diffPause = Duration.between(startPauseDatetime, startPauseDatetime)
-    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS") // "yyyy-MM-dd HH:mm:ss.SSS" // change later to HH:mm
+    private lateinit var diff: Duration
+    private lateinit var diffPause: Duration
+    private val formatter = DateTimeFormatter.ofPattern("HH:mm")
+    private val formatterDB = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+    private var gesPauseSeconds: Long = 0
     var status = 0
 
-    fun startSession(name: String, project: String) {
+    private val sqliteHelper: SQLiteHelper = SQLiteHelper(context)
+    private lateinit var user: String
+    private lateinit var project: String
+    private var pauseList = mutableListOf<SessionPause>()
+
+    fun startSession(user: String, project: String) {
         status = 1
+        gesPauseSeconds = 0
         startDatetime = LocalDateTime.now()
+        this.user = user
+        this.project = project
     }
 
     fun getSessionStartTime(): String {
@@ -34,7 +45,11 @@ class TimeTracking : Serializable {
         status = 4
         endDatetime = LocalDateTime.now()
         diff = Duration.between(startDatetime, endDatetime)
-        //TODO insert in db
+        sqliteHelper.insertTimeTracking(user,
+            project,
+            startDatetime.format(formatterDB),
+            endDatetime.format(formatterDB),
+            pauseList)
     }
 
     fun getSessionEndTime(): String {
@@ -46,7 +61,7 @@ class TimeTracking : Serializable {
     }
 
     fun getSessionWorkingTime(): String {
-        return formatDuration(diff.seconds-diffPause.seconds)
+        return formatDuration(diff.seconds-gesPauseSeconds)
     }
 
     fun startPause() {
@@ -62,6 +77,10 @@ class TimeTracking : Serializable {
         status = 3
         endPauseDatetime = LocalDateTime.now()
         diffPause = Duration.between(startPauseDatetime, endPauseDatetime)
+        gesPauseSeconds += diffPause.seconds
+        pauseList.add(SessionPause(
+            startPauseDatetime.format(formatterDB),
+            endPauseDatetime.format(formatterDB)))
     }
 
     fun getPauseEndTime(): String {
@@ -82,26 +101,6 @@ class TimeTracking : Serializable {
     }
 
     fun getHistoryList(): MutableList<HistoryItem> {
-        //TODO replace with select from db
-        return mutableListOf(
-            HistoryItem("username",
-                "projectname",
-                "01.01.1970",
-                "00:00",
-                "00:00",
-                "00:00:00"),
-            HistoryItem("user",
-                "proj",
-                "date1",
-                "start",
-                "end",
-                "duration"),
-            HistoryItem("user",
-                "proj",
-                "date2",
-                "start",
-                "end",
-                "duration")
-        )
+        return sqliteHelper.getHistoryList()
     }
 }
