@@ -182,11 +182,11 @@ class SQLiteHelper(context: Context):
 
     fun getHistoryList(): MutableList<HistoryItem> {
         val historyList = mutableListOf<HistoryItem>()
-        val selectQuery = "SELECT username, projectname, " +
+        val selectQuery = "SELECT " + USER_NAME + ", " + PROJECT_NAME + ", " +
                 "startdate, starttime, endtime, " +
                 "(CAST (timediff * 24 AS INTEGER)) || \":\" || " +
                 "(CAST (timediff * 24 * 60 AS INTEGER)) || \":\" || " +
-                "(CAST (timediff * 24 * 60 * 60 AS INTEGER)) AS duration" +
+                "(CAST (timediff * 24 * 60 * 60 AS INTEGER)) AS duration " +
                 "FROM (SELECT " + USER_NAME + ", " + PROJECT_NAME + ", " +
                 "date(" + SESSION_START + ") AS startdate, " +
                 "substr(time(" + SESSION_START + "), 0, 6) AS starttime, " +
@@ -244,5 +244,33 @@ class SQLiteHelper(context: Context):
         return historyList
     }
 
-    
+    fun getLastUser(): String {
+        val selectQuery = "SELECT " + USER_NAME + " FROM " + TABLE_SESSION + " " +
+                "INNER JOIN " + TABLE_USER + " " +
+                "ON " + TABLE_USER + "." + USER_ID + " = " + TABLE_SESSION + "." + USER_ID + " " +
+                "ORDER BY " + TABLE_SESSION + "." + SESSION_END + " DESC LIMIT 1"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+        cursor = db.rawQuery(selectQuery, null)
+        cursor.moveToFirst()
+        val userName = cursor.getString(0)
+        cursor.close()
+        db.close()
+        return userName
+    }
+
+    fun getLastProject(): String {
+        val selectQuery = "SELECT " + PROJECT_NAME + " FROM " + TABLE_SESSION + " " +
+                "INNER JOIN " + TABLE_PROJECT + " " +
+                "ON " + TABLE_PROJECT + "." + PROJECT_ID + " = " + TABLE_SESSION + "." + PROJECT_ID + " " +
+                "ORDER BY " + TABLE_SESSION + "." + SESSION_END + " DESC LIMIT 1"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+        cursor = db.rawQuery(selectQuery, null)
+        cursor.moveToFirst()
+        val projectName = cursor.getString(0)
+        cursor.close()
+        db.close()
+        return projectName
+    }
 }
