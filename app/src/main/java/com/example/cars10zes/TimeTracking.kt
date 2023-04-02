@@ -21,7 +21,7 @@ class TimeTracking : Serializable {
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS") // "yyyy-MM-dd HH:mm:ss.SSS" // change later to HH:mm
     var status = 0
 
-    fun startSession() {
+    fun startSession(name: String, project: String) {
         status = 1
         startDatetime = LocalDateTime.now()
     }
@@ -34,6 +34,7 @@ class TimeTracking : Serializable {
         status = 4
         endDatetime = LocalDateTime.now()
         diff = Duration.between(startDatetime, endDatetime)
+        //TODO insert in db
     }
 
     fun getSessionEndTime(): String {
@@ -78,5 +79,29 @@ class TimeTracking : Serializable {
         val m = s / 60;
         s -= m * 60;
         return "$h:$m:$s"
+    }
+
+    fun getHistoryList(): MutableList<HistoryItem> {
+        //TODO replace with select from db
+        return mutableListOf(
+            HistoryItem("username",
+                "projectname",
+                "01.01.1970",
+                "00:00",
+                "00:00",
+                "00:00:00"),
+            HistoryItem("user",
+                "proj",
+                "date1",
+                "start",
+                "end",
+                "duration"),
+            HistoryItem("user",
+                "proj",
+                "date2",
+                "start",
+                "end",
+                "duration")
+        )
     }
 }
