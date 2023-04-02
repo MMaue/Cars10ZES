@@ -71,19 +71,6 @@ class SQLiteHelper(context: Context):
         }
     }
 
-    private fun getLastID(tableName: String): Int {
-        val selectQuery = "SELECT seq FROM sqlite_sequence " +
-                "WHERE name=\"" + tableName + "\""
-        val db = this.readableDatabase
-        val cursor: Cursor?
-        cursor = db.rawQuery(selectQuery, null)
-        cursor.moveToFirst()
-        val lastID = cursor.getInt(0)
-        cursor.close()
-        db.close()
-        return lastID
-    }
-
     fun insertTimeTracking(user: String,
                            project: String,
                            start: String,
@@ -164,22 +151,20 @@ class SQLiteHelper(context: Context):
         contentValues.put(PROJECT_ID, projectID)
         val res = db.insert(TABLE_SESSION, null, contentValues)
         db.close()
-        checkSuccess(res)
-        return getLastID(TABLE_SESSION)
+        return getSessionID()
     }
 
     private fun getSessionID(): Int {
-        // select seq from sqlite_sequence where name="table_name"
-        val selectQuery = "SELECT seq FROM sqlite_sequence" +
-                "WHERE name=" + TABLE_SESSION
+        val selectQuery = "SELECT seq FROM sqlite_sequence " +
+                "WHERE name=\"" + TABLE_SESSION + "\""
         val db = this.readableDatabase
         val cursor: Cursor?
         cursor = db.rawQuery(selectQuery, null)
         cursor.moveToFirst()
-        val sessionID = cursor.getInt(0)
+        val lastID = cursor.getInt(0)
         cursor.close()
         db.close()
-        return sessionID
+        return lastID
     }
 
     private fun insertPauses(sessionID: Int, pauses: MutableList<SessionPause>) {
@@ -191,48 +176,73 @@ class SQLiteHelper(context: Context):
             contentValues.put(PAUSE_END, pause.end)
             contentValues.put(SESSION_ID, sessionID)
             val res = db.insert(TABLE_PAUSE, null, contentValues)
-            checkSuccess(res)
         }
         db.close()
     }
 
-    fun getsome(): ArrayList<String> {
-        val somlist: ArrayList<String> = ArrayList()
-        val selectQuery = "SELECT * FROM $TABLE_USER"
+    fun getHistoryList(): MutableList<HistoryItem> {
+        val historyList = mutableListOf<HistoryItem>()
+        val selectQuery = "SELECT username, projectname, " +
+                "startdate, starttime, endtime, " +
+                "(CAST (timediff * 24 AS INTEGER)) || \":\" || " +
+                "(CAST (timediff * 24 * 60 AS INTEGER)) || \":\" || " +
+                "(CAST (timediff * 24 * 60 * 60 AS INTEGER)) AS duration" +
+                "FROM (SELECT " + USER_NAME + ", " + PROJECT_NAME + ", " +
+                "date(" + SESSION_START + ") AS startdate, " +
+                "substr(time(" + SESSION_START + "), 0, 6) AS starttime, " +
+                "substr(time(" + SESSION_END + "), 0, 6) AS endtime, " +
+                "(julianday(" + SESSION_END + ") - julianday(" + SESSION_START + ") - pausetimediff) AS timediff " +
+                "FROM " + TABLE_SESSION + " " +
+                "INNER JOIN " + TABLE_USER + " " +
+                "ON " + TABLE_USER + "." + USER_ID + " = " + TABLE_SESSION + "." + USER_ID + " " +
+                "INNER JOIN " + TABLE_PROJECT + " " +
+                "ON " + TABLE_PROJECT + "." + PROJECT_ID + " = " + TABLE_SESSION + "." + PROJECT_ID + " " +
+                "INNER JOIN (SELECT " + SESSION_ID + ", " +
+                "sum(julianday(" + PAUSE_END + ") - julianday(" + PAUSE_START + ")) AS pausetimediff " +
+                "FROM " + TABLE_PAUSE + " " +
+                "GROUP BY " + SESSION_ID + ") AS res " +
+                "ON res." + SESSION_ID + " = " + TABLE_SESSION + "." + SESSION_ID + " " +
+                "ORDER BY " + TABLE_SESSION + "." + SESSION_END + " DESC) AS res"
         val db = this.readableDatabase
         val cursor: Cursor?
-        //cursor.moveToFirst()
 
         try {
             cursor = db.rawQuery(selectQuery, null)
         } catch (e: Exception) {
             e.printStackTrace()
             db.execSQL(selectQuery)
-            return ArrayList(0)
+            return historyList
         }
-        return ArrayList(0)
+
+        var userName: String
+        var projectName: String
+        var sessionDate: String
+        var sessionStart: String
+        var sessionEnd: String
+        var sessionDuration: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                userName = cursor.getString(0)
+                projectName = cursor.getString(1)
+                sessionDate = cursor.getString(2)
+                sessionStart = cursor.getString(3)
+                sessionEnd = cursor.getString(4)
+                sessionDuration = cursor.getString(5)
+
+                val historyItem = HistoryItem(
+                    userName,
+                    projectName,
+                    sessionDate,
+                    sessionStart,
+                    sessionEnd,
+                    sessionDuration)
+                historyList.add(historyItem)
+            } while (cursor.moveToNext())
+        }
+
+        return historyList
     }
 
-    fun getHistoryList(): MutableList<HistoryItem> {
-        return mutableListOf(
-            HistoryItem("username",
-                "projectname",
-                "01.01.1970",
-                "00:00",
-                "00:00",
-                "00:00:00"),
-            HistoryItem("user",
-                "proj",
-                "date1",
-                "start",
-                "end",
-                "duration"),
-            HistoryItem("user",
-                "proj",
-                "date2",
-                "start",
-                "end",
-                "duration")
-        )
-    }
+    
 }
