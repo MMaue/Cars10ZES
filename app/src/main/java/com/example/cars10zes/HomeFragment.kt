@@ -7,6 +7,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 
 
@@ -18,6 +19,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
+        this.activity?.title = getString(R.string.title_home)
 
         val timeTracking = arguments?.get("data") as TimeTracking
 
@@ -40,12 +42,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val textGesTime = view.findViewById<TextView>(R.id.text_ges_time)
 
         buttonSessionStart.setOnClickListener {
-            timeTracking.startSession()
-            textSessionStartTime.text = timeTracking.getSessionStartTime()
-            buttonSessionEnd.isEnabled = true
-            buttonPauseStart.isEnabled = true
-            buttonPauseEnd.isEnabled = false
-            buttonSessionStart.isEnabled = false
+            val userName = inputUser.text.toString()
+            val projectName = inputProject.text.toString()
+            if (userName.isNotEmpty() && projectName.isNotEmpty()) {
+                timeTracking.startSession(userName, projectName)
+                textSessionStartTime.text = timeTracking.getSessionStartTime()
+                buttonSessionEnd.isEnabled = true
+                buttonPauseStart.isEnabled = true
+                buttonPauseEnd.isEnabled = false
+                buttonSessionStart.isEnabled = false
+            } else {
+                Toast.makeText(context, R.string.toast_home_missing_data, Toast.LENGTH_LONG).show()
+            }
         }
 
         buttonSessionEnd.setOnClickListener {
