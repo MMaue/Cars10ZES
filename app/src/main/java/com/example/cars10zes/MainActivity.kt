@@ -58,14 +58,14 @@ class MainActivity : AppCompatActivity() {
         navView.setNavigationItemSelectedListener {
             it.isChecked = true
             when(it.itemId){
-                R.id.nav_home -> replaceFragment(homeFragment, it.title.toString())
-                R.id.nav_settings -> replaceFragment(settingsFragment, it.title.toString())
-                R.id.nav_history -> replaceFragment(historyFragment, it.title.toString())
-                R.id.nav_calendar -> replaceFragment(calendarFragment, it.title.toString())
-                R.id.nav_overview -> replaceFragment(overviewFragment, it.title.toString())
-                R.id.nav_startendtimes -> replaceFragment(startEndTimesFragment, it.title.toString())
-                R.id.nav_entry -> replaceFragment(newEntryFragment, it.title.toString())
-                R.id.nav_trash -> replaceFragment(deleteEntryFragment, it.title.toString())
+                R.id.nav_home -> replaceFragment(homeFragment)
+                R.id.nav_settings -> replaceFragment(settingsFragment)
+                R.id.nav_history -> replaceFragment(historyFragment)
+                R.id.nav_calendar -> replaceFragment(calendarFragment)
+                R.id.nav_overview -> replaceFragment(overviewFragment)
+                R.id.nav_startendtimes -> replaceFragment(startEndTimesFragment)
+                R.id.nav_entry -> replaceFragment(newEntryFragment)
+                R.id.nav_trash -> replaceFragment(deleteEntryFragment)
 
                 R.id.nav_version -> Toast.makeText(applicationContext, BuildConfig.VERSION_NAME, Toast.LENGTH_SHORT).show()
                 R.id.nav_link -> openWebPage(getString(R.string.source_code_link))
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
         // navigation menu end
-        replaceFragment(homeFragment, getString(R.string.title_home))
+        replaceFragment(homeFragment)
     }
 
     private fun openWebPage(urls: String) {
@@ -82,14 +82,13 @@ class MainActivity : AppCompatActivity() {
         startActivity(intents)
     }
 
-    private fun replaceFragment(fragment: Fragment, title: String){
+    private fun replaceFragment(fragment: Fragment){
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.frameLayout, fragment)
             addToBackStack(null)
             commit()
         }
         drawerLayout.closeDrawers()
-        setTitle(title)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
