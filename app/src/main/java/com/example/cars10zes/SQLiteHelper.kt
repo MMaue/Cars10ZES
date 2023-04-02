@@ -1,6 +1,5 @@
 package com.example.cars10zes
 
-import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
@@ -61,14 +60,6 @@ class SQLiteHelper(context: Context):
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SESSION)
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PAUSE)
         onCreate(db)
-    }
-
-    private fun checkSuccess(res: Long) {
-        if (res == (-1).toLong()) {
-            println("error")
-        } else {
-            println("dbinsert success")
-        }
     }
 
     fun insertTimeTracking(user: String,
@@ -245,31 +236,43 @@ class SQLiteHelper(context: Context):
     }
 
     fun getLastUser(): String {
+        var userName = ""
         val selectQuery = "SELECT " + USER_NAME + " FROM " + TABLE_SESSION + " " +
                 "INNER JOIN " + TABLE_USER + " " +
                 "ON " + TABLE_USER + "." + USER_ID + " = " + TABLE_SESSION + "." + USER_ID + " " +
                 "ORDER BY " + TABLE_SESSION + "." + SESSION_END + " DESC LIMIT 1"
         val db = this.readableDatabase
         val cursor: Cursor?
-        cursor = db.rawQuery(selectQuery, null)
-        cursor.moveToFirst()
-        val userName = cursor.getString(0)
-        cursor.close()
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+            cursor.moveToFirst()
+            userName = cursor.getString(0)
+            cursor.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            userName = ""
+        }
         db.close()
         return userName
     }
 
     fun getLastProject(): String {
+        var projectName = ""
         val selectQuery = "SELECT " + PROJECT_NAME + " FROM " + TABLE_SESSION + " " +
                 "INNER JOIN " + TABLE_PROJECT + " " +
                 "ON " + TABLE_PROJECT + "." + PROJECT_ID + " = " + TABLE_SESSION + "." + PROJECT_ID + " " +
                 "ORDER BY " + TABLE_SESSION + "." + SESSION_END + " DESC LIMIT 1"
         val db = this.readableDatabase
         val cursor: Cursor?
-        cursor = db.rawQuery(selectQuery, null)
-        cursor.moveToFirst()
-        val projectName = cursor.getString(0)
-        cursor.close()
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+            cursor.moveToFirst()
+            projectName = cursor.getString(0)
+            cursor.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            projectName = ""
+        }
         db.close()
         return projectName
     }

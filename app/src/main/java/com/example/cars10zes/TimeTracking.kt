@@ -11,7 +11,6 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 class TimeTracking(context: Context): Serializable {
-    //TODO use datastore to save name project or settings
     private var startDatetime: LocalDateTime = LocalDateTime.now()
     private lateinit var endDatetime: LocalDateTime
     private lateinit var startPauseDatetime: LocalDateTime
@@ -102,5 +101,15 @@ class TimeTracking(context: Context): Serializable {
 
     fun getHistoryList(): MutableList<HistoryItem> {
         return sqliteHelper.getHistoryList()
+    }
+
+    fun getLastUser(): String {
+        user = sqliteHelper.getLastUser()
+        return user
+    }
+
+    fun getLastProject(): String {
+        project = sqliteHelper.getLastProject()
+        return project
     }
 }
