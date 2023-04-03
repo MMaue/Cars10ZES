@@ -12,7 +12,6 @@
     <string name="hint_home_user">Name</string>
     <string name="hint_home_project">Projekt</string>
     <string name="text_home_time_default">Zeit</string>
-    <string name="title_settings">Einstellungen</string>
     <string name="title_group_data">Daten</string>
     <string name="title_history">Verlauf</string>
     <string name="title_calendar">Kalender</string>
@@ -23,6 +22,5 @@
     <string name="title_deleteentry">Löschen</string>
     <string name="title_group_info">Informationen</string>
     <string name="title_version">Version</string>
-    <string name="title_sourcecode">Quell Code</string>
     <string name="toast_home_missing_data">Bitte Projekt und Name eingeben</string>
 </resources>

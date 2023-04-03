@@ -27,13 +27,15 @@ class HistoryAdapter(
         val textStart = holder.itemView.findViewById<TextView>(R.id.text_start)
         val textEnd = holder.itemView.findViewById<TextView>(R.id.text_end)
         val textDuration = holder.itemView.findViewById<TextView>(R.id.text_duration)
+        val textDurationPause = holder.itemView.findViewById<TextView>(R.id.text_duration_pause)
         holder.itemView.apply {
             textUser.text = historyItems[position].nameUser
             textProject.text = historyItems[position].nameProject
             textDate.text = historyItems[position].date
             textStart.text = historyItems[position].sessionStart
             textEnd.text = historyItems[position].sessionEnd
-            textDuration.text = historyItems[position].duration
+            textDuration.text = historyItems[position].sessionDuration
+            textDurationPause.text = historyItems[position].pauseDuration
         }
     }
 

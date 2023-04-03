@@ -34,8 +34,6 @@ class MainActivity : AppCompatActivity() {
 
         val homeFragment = HomeFragment()
         homeFragment.arguments = bundle
-        val settingsFragment = SettingsFragment()
-        settingsFragment.arguments = bundle
         val historyFragment = HistoryFragment()
         historyFragment.arguments = bundle
         val calendarFragment = CalendarFragment()
@@ -59,7 +57,6 @@ class MainActivity : AppCompatActivity() {
             it.isChecked = true
             when(it.itemId){
                 R.id.nav_home -> replaceFragment(homeFragment)
-                R.id.nav_settings -> replaceFragment(settingsFragment)
                 R.id.nav_history -> replaceFragment(historyFragment)
                 R.id.nav_calendar -> replaceFragment(calendarFragment)
                 R.id.nav_overview -> replaceFragment(overviewFragment)

@@ -6,5 +6,6 @@ data class HistoryItem(
     val date: String,
     val sessionStart: String,
     val sessionEnd: String,
-    val duration: String
+    var sessionDuration: String,
+    var pauseDuration: String
 )

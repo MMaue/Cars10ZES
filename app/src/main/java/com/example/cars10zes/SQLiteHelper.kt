@@ -39,7 +39,7 @@ class SQLiteHelper(context: Context):
         val createSessionTable = "CREATE TABLE " + TABLE_SESSION + " (" +
                 SESSION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 SESSION_START + " TEXT NOT NULL, " +
-                SESSION_END + " TEXT NOT NULL, " +
+                SESSION_END + " TEXT, " +
                 USER_ID + " INTEGER NOT NULL, " +
                 PROJECT_ID + " INTEGER NOT NULL, " +
                 "FOREIGN KEY(" + USER_ID + ") REFERENCES " + TABLE_USER + "(" + USER_ID + "), " +
@@ -48,7 +48,7 @@ class SQLiteHelper(context: Context):
         val createPauseTable = "CREATE TABLE " + TABLE_PAUSE + " (" +
                 PAUSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 PAUSE_START + " TEXT NOT NULL, " +
-                PAUSE_END + " TEXT NOT NULL, " +
+                PAUSE_END + " TEXT, " +
                 SESSION_ID + " INTEGER NOT NULL, " +
                 "FOREIGN KEY(" + SESSION_ID + ") REFERENCES " + TABLE_SESSION + "(" + SESSION_ID + ")" + "); "
         db?.execSQL(createPauseTable)
@@ -174,26 +174,25 @@ class SQLiteHelper(context: Context):
     fun getHistoryList(): MutableList<HistoryItem> {
         val historyList = mutableListOf<HistoryItem>()
         val selectQuery = "SELECT " + USER_NAME + ", " + PROJECT_NAME + ", " +
-                "startdate, starttime, endtime, " +
-                "(CAST (timediff * 24 AS INTEGER)) || \":\" || " +
-                "(CAST (timediff * 24 * 60 AS INTEGER)) || \":\" || " +
-                "(CAST (timediff * 24 * 60 * 60 AS INTEGER)) AS duration " +
-                "FROM (SELECT " + USER_NAME + ", " + PROJECT_NAME + ", " +
                 "date(" + SESSION_START + ") AS startdate, " +
                 "substr(time(" + SESSION_START + "), 0, 6) AS starttime, " +
                 "substr(time(" + SESSION_END + "), 0, 6) AS endtime, " +
-                "(julianday(" + SESSION_END + ") - julianday(" + SESSION_START + ") - pausetimediff) AS timediff " +
+                "CAST ((julianday(" + SESSION_END + ") - julianday(" + SESSION_START + ")) * 24 * 60 * 60 AS INTEGER), " +
+                "CASE WHEN pausetimediff IS NOT NULL " +
+                "THEN CAST(pausetimediff * 24 * 60 * 60 AS INTEGER) " +
+                "ELSE 0 " +
+                "END AS duration_pause " +
                 "FROM " + TABLE_SESSION + " " +
                 "INNER JOIN " + TABLE_USER + " " +
                 "ON " + TABLE_USER + "." + USER_ID + " = " + TABLE_SESSION + "." + USER_ID + " " +
                 "INNER JOIN " + TABLE_PROJECT + " " +
                 "ON " + TABLE_PROJECT + "." + PROJECT_ID + " = " + TABLE_SESSION + "." + PROJECT_ID + " " +
-                "INNER JOIN (SELECT " + SESSION_ID + ", " +
+                "LEFT JOIN (SELECT " + SESSION_ID + ", " +
                 "sum(julianday(" + PAUSE_END + ") - julianday(" + PAUSE_START + ")) AS pausetimediff " +
                 "FROM " + TABLE_PAUSE + " " +
                 "GROUP BY " + SESSION_ID + ") AS res " +
                 "ON res." + SESSION_ID + " = " + TABLE_SESSION + "." + SESSION_ID + " " +
-                "ORDER BY " + TABLE_SESSION + "." + SESSION_END + " DESC) AS res"
+                "ORDER BY " + TABLE_SESSION + "." + SESSION_END + " DESC"
         val db = this.readableDatabase
         val cursor: Cursor?
 
@@ -211,6 +210,7 @@ class SQLiteHelper(context: Context):
         var sessionStart: String
         var sessionEnd: String
         var sessionDuration: String
+        var pauseDuration: String
 
         if (cursor.moveToFirst()) {
             do {
@@ -220,6 +220,7 @@ class SQLiteHelper(context: Context):
                 sessionStart = cursor.getString(3)
                 sessionEnd = cursor.getString(4)
                 sessionDuration = cursor.getString(5)
+                pauseDuration = cursor.getString(6)
 
                 val historyItem = HistoryItem(
                     userName,
@@ -227,7 +228,8 @@ class SQLiteHelper(context: Context):
                     sessionDate,
                     sessionStart,
                     sessionEnd,
-                    sessionDuration)
+                    sessionDuration,
+                    pauseDuration)
                 historyList.add(historyItem)
             } while (cursor.moveToNext())
         }

@@ -69,6 +69,7 @@ class TimeTracking(context: Context): Serializable {
     }
 
     fun getPauseStartTime(): String {
+        //TODO init startPauseDatetime
         return startPauseDatetime.format(formatter)
     }
 
@@ -100,7 +101,14 @@ class TimeTracking(context: Context): Serializable {
     }
 
     fun getHistoryList(): MutableList<HistoryItem> {
-        return sqliteHelper.getHistoryList()
+        val historyList =  sqliteHelper.getHistoryList()
+        for (historyItem in historyList) {
+            val sessionSec = historyItem.sessionDuration.toLong()
+            val pauseSec = historyItem.pauseDuration.toLong()
+            historyItem.sessionDuration = formatDuration(sessionSec-pauseSec)
+            historyItem.pauseDuration = formatDuration(pauseSec)
+        }
+        return historyList
     }
 
     fun getLastUser(): String {
