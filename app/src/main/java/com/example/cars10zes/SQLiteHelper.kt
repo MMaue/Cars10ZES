@@ -3,6 +3,7 @@ package com.example.cars10zes
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import android.database.CursorIndexOutOfBoundsException
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
@@ -12,7 +13,7 @@ class SQLiteHelper(context: Context):
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
         private const val DATABASE_NAME = "timeTracking.db"
         private const val TABLE_USER = "user"
         private const val USER_ID = "user_id"
@@ -64,15 +65,30 @@ class SQLiteHelper(context: Context):
         onCreate(db)
     }
 
-    fun insertTimeTracking(user: String,
+    fun insertSessionStart(user: String,
                            project: String,
-                           start: String,
-                           end: String,
-                           pauseList: MutableList<SessionPause>) {
+                           start: String) {
         val userID = insertUser(user)
         val projectID = insertProject(project)
-        val sessionID = insertSession(start, end, userID, projectID)
-        insertPauses(sessionID, pauseList)
+        val db = this.writableDatabase
+
+        val contentValues = ContentValues()
+        contentValues.put(SESSION_START, start)
+        // SESSION_END NULL
+        contentValues.put(USER_ID, userID)
+        contentValues.put(PROJECT_ID, projectID)
+        db.insert(TABLE_SESSION, null, contentValues)
+        db.close()
+    }
+
+    fun insertSessionEnd(end: String) {
+        val sessionID = getSessionID()
+        val db = this.writableDatabase
+
+        val contentValues = ContentValues()
+        contentValues.put(SESSION_END, end)
+        db.update(TABLE_SESSION, contentValues, SESSION_ID + " = " + sessionID, null)
+        db.close()
     }
 
     private fun insertUser(userName: String): Int {
@@ -133,22 +149,6 @@ class SQLiteHelper(context: Context):
         return projectID
     }
 
-    private fun insertSession(start: String,
-                              end: String,
-                              userID: Int,
-                              projectID: Int): Int {
-        val db = this.writableDatabase
-
-        val contentValues = ContentValues()
-        contentValues.put(SESSION_START, start)
-        contentValues.put(SESSION_END, end)
-        contentValues.put(USER_ID, userID)
-        contentValues.put(PROJECT_ID, projectID)
-        val res = db.insert(TABLE_SESSION, null, contentValues)
-        db.close()
-        return getSessionID()
-    }
-
     private fun getSessionID(): Int {
         val selectQuery = "SELECT seq FROM sqlite_sequence " +
                 "WHERE name=\"" + TABLE_SESSION + "\""
@@ -162,16 +162,25 @@ class SQLiteHelper(context: Context):
         return lastID
     }
 
-    private fun insertPauses(sessionID: Int, pauses: MutableList<SessionPause>) {
+    fun insertPauseStart(start: String) {
+        val sessionID = getSessionID()
         val db = this.writableDatabase
 
-        for (pause in pauses) {
-            val contentValues = ContentValues()
-            contentValues.put(PAUSE_START, pause.start)
-            contentValues.put(PAUSE_END, pause.end)
-            contentValues.put(SESSION_ID, sessionID)
-            val res = db.insert(TABLE_PAUSE, null, contentValues)
-        }
+        val contentValues = ContentValues()
+        contentValues.put(PAUSE_START, start)
+        // PAUSE_END NULL
+        contentValues.put(SESSION_ID, sessionID)
+        db.insert(TABLE_PAUSE, null, contentValues)
+        db.close()
+    }
+
+    fun insertPauseEnd(end: String) {
+        val sessionID = getSessionID()
+        val db = this.writableDatabase
+
+        val contentValues = ContentValues()
+        contentValues.put(PAUSE_END, end)
+        db.update(TABLE_PAUSE, contentValues, SESSION_ID + " = " + sessionID, null)
         db.close()
     }
 
@@ -223,6 +232,7 @@ class SQLiteHelper(context: Context):
                 sessionDate = cursor.getString(2)
                 sessionStart = cursor.getString(3)
                 sessionEnd = cursor.getString(4)
+                // java.lang.NullPointerException: cursor.getString(4) must not be null
                 sessionDuration = cursor.getString(5)
                 pauseDuration = cursor.getString(6)
 
@@ -254,8 +264,7 @@ class SQLiteHelper(context: Context):
             cursor.moveToFirst()
             userName = cursor.getString(0)
             cursor.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (_: CursorIndexOutOfBoundsException) {
             userName = ""
         }
         db.close()
@@ -275,8 +284,7 @@ class SQLiteHelper(context: Context):
             cursor.moveToFirst()
             projectName = cursor.getString(0)
             cursor.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (_: CursorIndexOutOfBoundsException) {
             projectName = ""
         }
         db.close()

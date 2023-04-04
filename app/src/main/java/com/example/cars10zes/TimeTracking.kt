@@ -26,7 +26,6 @@ class TimeTracking(context: Context): Serializable {
     private val sqliteHelper: SQLiteHelper = SQLiteHelper(context)
     private lateinit var user: String
     private lateinit var project: String
-    private var pauseList = mutableListOf<SessionPause>()
 
     fun startSession(user: String, project: String) {
         status = 1
@@ -34,6 +33,9 @@ class TimeTracking(context: Context): Serializable {
         startDatetime = LocalDateTime.now()
         this.user = user
         this.project = project
+        sqliteHelper.insertSessionStart(user,
+            project,
+            startDatetime.format(formatterDB))
     }
 
     fun getSessionStartTime(): String {
@@ -44,11 +46,7 @@ class TimeTracking(context: Context): Serializable {
         status = 4
         endDatetime = LocalDateTime.now()
         diff = Duration.between(startDatetime, endDatetime)
-        sqliteHelper.insertTimeTracking(user,
-            project,
-            startDatetime.format(formatterDB),
-            endDatetime.format(formatterDB),
-            pauseList)
+        sqliteHelper.insertSessionEnd(endDatetime.format(formatterDB))
     }
 
     fun getSessionEndTime(): String {
@@ -66,6 +64,7 @@ class TimeTracking(context: Context): Serializable {
     fun startPause() {
         status = 2
         startPauseDatetime = LocalDateTime.now()
+        sqliteHelper.insertPauseStart(startPauseDatetime.format(formatterDB))
     }
 
     fun getPauseStartTime(): String {
@@ -81,9 +80,7 @@ class TimeTracking(context: Context): Serializable {
         endPauseDatetime = LocalDateTime.now()
         diffPause = Duration.between(startPauseDatetime, endPauseDatetime)
         gesPauseSeconds += diffPause.seconds
-        pauseList.add(SessionPause(
-            startPauseDatetime.format(formatterDB),
-            endPauseDatetime.format(formatterDB)))
+        sqliteHelper.insertPauseEnd(endPauseDatetime.format(formatterDB))
     }
 
     fun getPauseEndTime(): String {
