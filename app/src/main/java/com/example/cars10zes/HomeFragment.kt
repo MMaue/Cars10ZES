@@ -31,8 +31,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val inputUser = view.findViewById<TextInputEditText>(R.id.input_user)
         val inputProject = view.findViewById<TextInputEditText>(R.id.input_project)
-        inputUser.setText(timeTracking.getLastUser())
-        inputProject.setText(timeTracking.getLastProject())
 
         val textSessionStartTime = view.findViewById<TextView>(R.id.text_session_start_time)
         val textSessionEndTime = view.findViewById<TextView>(R.id.text_session_end_time)
@@ -89,6 +87,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         // restore last state
+        inputUser.setText(timeTracking.getLastUser())
+        inputProject.setText(timeTracking.getLastProject())
+        timeTracking.restoreStatus()
         when(timeTracking.status){
             0 -> {
                 buttonSessionStart.isEnabled = true

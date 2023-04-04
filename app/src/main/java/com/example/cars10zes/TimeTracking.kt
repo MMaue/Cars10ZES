@@ -128,4 +128,29 @@ class TimeTracking(context: Context): Serializable {
         project = sqliteHelper.getLastProject()
         return project
     }
+
+    fun restoreStatus() {
+        var sessionNull = false
+        var pauseNull = false
+        try {
+            sessionNull = sqliteHelper.sessionEndNull()
+        } catch (_: Exception) {
+
+        }
+        try {
+            pauseNull = sqliteHelper.pauseEndNull()
+        } catch (_: Exception) {
+
+        }
+        if (!sessionNull && !pauseNull) {
+            status = 0
+        } else if (sessionNull && !pauseNull) {
+            status = 1
+            startDatetime = LocalDateTime.parse(sqliteHelper.getLastSessionStart(), formatterDB)
+        } else if (sessionNull && pauseNull) {
+            status = 2
+            startDatetime = LocalDateTime.parse(sqliteHelper.getLastSessionStart(), formatterDB)
+            startPauseDatetime = LocalDateTime.parse(sqliteHelper.getLastPauseStart(), formatterDB)
+        }
+    }
 }

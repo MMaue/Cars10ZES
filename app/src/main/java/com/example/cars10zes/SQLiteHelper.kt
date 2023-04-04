@@ -6,7 +6,6 @@ import android.database.Cursor
 import android.database.CursorIndexOutOfBoundsException
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 
 class SQLiteHelper(context: Context):
@@ -82,7 +81,7 @@ class SQLiteHelper(context: Context):
     }
 
     fun insertSessionEnd(end: String) {
-        val sessionID = getSessionID()
+        val sessionID = getLastSessionID()
         val db = this.writableDatabase
 
         val contentValues = ContentValues()
@@ -149,7 +148,7 @@ class SQLiteHelper(context: Context):
         return projectID
     }
 
-    private fun getSessionID(): Int {
+    private fun getLastSessionID(): Int {
         val selectQuery = "SELECT seq FROM sqlite_sequence " +
                 "WHERE name=\"" + TABLE_SESSION + "\""
         val db = this.readableDatabase
@@ -162,8 +161,51 @@ class SQLiteHelper(context: Context):
         return lastID
     }
 
+    fun getLastSessionStart(): String {
+        val sessionID = getLastSessionID()
+        val selectQuery = "SELECT " + SESSION_START + " " +
+                "FROM " + TABLE_SESSION + " " +
+                "WHERE " + SESSION_ID + " = " + sessionID
+        val db = this.readableDatabase
+        val cursor: Cursor?
+        cursor = db.rawQuery(selectQuery, null)
+        cursor.moveToFirst()
+        val sessionStart = cursor.getString(0)
+        cursor.close()
+        db.close()
+        return sessionStart
+    }
+
+    private fun getLastPauseID(): Int {
+        val selectQuery = "SELECT seq FROM sqlite_sequence " +
+                "WHERE name=\"" + TABLE_PAUSE + "\""
+        val db = this.readableDatabase
+        val cursor: Cursor?
+        cursor = db.rawQuery(selectQuery, null)
+        cursor.moveToFirst()
+        val lastID = cursor.getInt(0)
+        cursor.close()
+        db.close()
+        return lastID
+    }
+
+    fun getLastPauseStart(): String {
+        val pauseID = getLastPauseID()
+        val selectQuery = "SELECT " + PAUSE_START + " " +
+                "FROM " + TABLE_PAUSE + " " +
+                "WHERE " + PAUSE_ID + " = " + pauseID
+        val db = this.readableDatabase
+        val cursor: Cursor?
+        cursor = db.rawQuery(selectQuery, null)
+        cursor.moveToFirst()
+        val pauseStart = cursor.getString(0)
+        cursor.close()
+        db.close()
+        return pauseStart
+    }
+
     fun insertPauseStart(start: String) {
-        val sessionID = getSessionID()
+        val sessionID = getLastSessionID()
         val db = this.writableDatabase
 
         val contentValues = ContentValues()
@@ -175,7 +217,7 @@ class SQLiteHelper(context: Context):
     }
 
     fun insertPauseEnd(end: String) {
-        val sessionID = getSessionID()
+        val sessionID = getLastSessionID()
         val db = this.writableDatabase
 
         val contentValues = ContentValues()
@@ -189,8 +231,14 @@ class SQLiteHelper(context: Context):
         val selectQuery = "SELECT " + USER_NAME + ", " + PROJECT_NAME + ", " +
                 "date(" + SESSION_START + ") AS startdate, " +
                 "substr(time(" + SESSION_START + "), 0, 6) AS starttime, " +
-                "substr(time(" + SESSION_END + "), 0, 6) AS endtime, " +
-                "CAST ((julianday(" + SESSION_END + ") - julianday(" + SESSION_START + ")) * 24 * 60 * 60 AS INTEGER), " +
+                "CASE WHEN " + SESSION_END + " IS NULL " +
+                "THEN \"\" " +
+                "ELSE substr(time(" + SESSION_END + "), 0, 6) " +
+                "END AS endtime, " +
+                "CASE WHEN " + SESSION_END + " IS NULL " +
+                "THEN CAST((julianday(\"now\", \"localtime\") - julianday(" + SESSION_START + ")) * 24 * 60 * 60 AS INTEGER) " +
+                "ELSE CAST((julianday(" + SESSION_END + ") - julianday(" + SESSION_START + ")) * 24 * 60 * 60 AS INTEGER) " +
+                "END AS duration_ges, " +
                 "CASE WHEN pausetimediff IS NOT NULL " +
                 "THEN CAST(pausetimediff * 24 * 60 * 60 AS INTEGER) " +
                 "ELSE 0 " +
@@ -205,7 +253,7 @@ class SQLiteHelper(context: Context):
                 "FROM " + TABLE_PAUSE + " " +
                 "GROUP BY " + SESSION_ID + ") AS res " +
                 "ON res." + SESSION_ID + " = " + TABLE_SESSION + "." + SESSION_ID + " " +
-                "ORDER BY " + TABLE_SESSION + "." + SESSION_END + " DESC"
+                "ORDER BY " + TABLE_SESSION + "." + SESSION_START + " DESC"
         val db = this.readableDatabase
         val cursor: Cursor?
 
@@ -256,7 +304,7 @@ class SQLiteHelper(context: Context):
         val selectQuery = "SELECT " + USER_NAME + " FROM " + TABLE_SESSION + " " +
                 "INNER JOIN " + TABLE_USER + " " +
                 "ON " + TABLE_USER + "." + USER_ID + " = " + TABLE_SESSION + "." + USER_ID + " " +
-                "ORDER BY " + TABLE_SESSION + "." + SESSION_END + " DESC LIMIT 1"
+                "ORDER BY " + TABLE_SESSION + "." + SESSION_START + " DESC LIMIT 1"
         val db = this.readableDatabase
         val cursor: Cursor?
         try {
@@ -276,7 +324,7 @@ class SQLiteHelper(context: Context):
         val selectQuery = "SELECT " + PROJECT_NAME + " FROM " + TABLE_SESSION + " " +
                 "INNER JOIN " + TABLE_PROJECT + " " +
                 "ON " + TABLE_PROJECT + "." + PROJECT_ID + " = " + TABLE_SESSION + "." + PROJECT_ID + " " +
-                "ORDER BY " + TABLE_SESSION + "." + SESSION_END + " DESC LIMIT 1"
+                "ORDER BY " + TABLE_SESSION + "." + SESSION_START + " DESC LIMIT 1"
         val db = this.readableDatabase
         val cursor: Cursor?
         try {
@@ -289,5 +337,35 @@ class SQLiteHelper(context: Context):
         }
         db.close()
         return projectName
+    }
+
+    fun sessionEndNull(): Boolean {
+        val sessionID = getLastSessionID()
+        val selectQuery = "SELECT " + SESSION_END + " IS NULL " +
+                "FROM " + TABLE_SESSION + " " +
+                "WHERE " + SESSION_ID + " = " + sessionID
+        val db = this.readableDatabase
+        val cursor: Cursor?
+        cursor = db.rawQuery(selectQuery, null)
+        cursor.moveToFirst()
+        val res = cursor.getInt(0)
+        cursor.close()
+        db.close()
+        return res==1
+    }
+
+    fun pauseEndNull(): Boolean {
+        val pauseID = getLastPauseID()
+        val selectQuery = "SELECT " + PAUSE_END + " IS NULL " +
+                "FROM " + TABLE_PAUSE + " " +
+                "WHERE " + PAUSE_ID + " = " + pauseID
+        val db = this.readableDatabase
+        val cursor: Cursor?
+        cursor = db.rawQuery(selectQuery, null)
+        cursor.moveToFirst()
+        val res = cursor.getInt(0)
+        cursor.close()
+        db.close()
+        return res==1
     }
 }
