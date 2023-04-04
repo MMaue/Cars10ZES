@@ -69,8 +69,11 @@ class TimeTracking(context: Context): Serializable {
     }
 
     fun getPauseStartTime(): String {
-        //TODO init startPauseDatetime
-        return startPauseDatetime.format(formatter)
+        return try {
+            startPauseDatetime.format(formatter)
+        } catch (_: UninitializedPropertyAccessException) {
+            ""
+        }
     }
 
     fun endPause() {
@@ -84,11 +87,19 @@ class TimeTracking(context: Context): Serializable {
     }
 
     fun getPauseEndTime(): String {
-        return endPauseDatetime.format(formatter)
+        return try {
+            endPauseDatetime.format(formatter)
+        } catch (_: UninitializedPropertyAccessException) {
+            ""
+        }
     }
 
     fun getPauseDuration(): String {
-        return formatDuration(diffPause.seconds)
+        return try {
+            formatDuration(diffPause.seconds)
+        } catch (_: UninitializedPropertyAccessException) {
+            ""
+        }
     }
 
     private fun formatDuration(seconds: Long): String {

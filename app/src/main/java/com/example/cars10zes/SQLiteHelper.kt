@@ -3,7 +3,9 @@ package com.example.cars10zes
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 
 class SQLiteHelper(context: Context):
@@ -74,15 +76,16 @@ class SQLiteHelper(context: Context):
     }
 
     private fun insertUser(userName: String): Int {
+        //TODO first check if id exists then return or insert
         val db = this.writableDatabase
 
         val contentValues = ContentValues()
         contentValues.put(USER_NAME, userName)
 
         try {
-            val res = db.insert(TABLE_USER, null, contentValues)
-        } catch (e: Exception) {
-            e.printStackTrace()
+            db.insertOrThrow(TABLE_USER, null, contentValues)
+        } catch (_: SQLiteConstraintException) {
+
         }
         db.close()
         return getUserID(userName)
@@ -102,15 +105,16 @@ class SQLiteHelper(context: Context):
     }
 
     private fun insertProject(projectName: String): Int {
+        //TODO first check if id exists then return or insert
         val db = this.writableDatabase
 
         val contentValues = ContentValues()
         contentValues.put(PROJECT_NAME, projectName)
 
         try {
-            val res = db.insert(TABLE_PROJECT, null, contentValues)
-        } catch (e: Exception) {
-            e.printStackTrace()
+            db.insertOrThrow(TABLE_PROJECT, null, contentValues)
+        } catch (_: SQLiteConstraintException) {
+
         }
         db.close()
         return getProjectID(projectName)
