@@ -46,8 +46,8 @@ class TimeTracking(context: Context): Serializable {
         status = 4
         endDatetime = LocalDateTime.now()
         diff = Duration.between(startDatetime, endDatetime)
-        gesPauseSeconds = sqliteHelper.getLastPauseTime()
         sqliteHelper.insertSessionEnd(endDatetime.format(formatterDB))
+        gesPauseSeconds = sqliteHelper.getLastPauseTime()
     }
 
     fun getSessionEndTime(): String {

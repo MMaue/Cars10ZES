@@ -369,6 +369,7 @@ class SQLiteHelper(context: Context):
     }
 
     fun getLastPauseTime(): Long {
+        var res: Long
         val sessionID = getLastSessionID()
         val selectQuery = "SELECT CAST(sum(julianday(" + PAUSE_END + ") - julianday(" + PAUSE_START + ")) * 24 * 60 * 60 AS INTEGER) " +
                 "FROM " + TABLE_PAUSE + " " +
@@ -376,10 +377,14 @@ class SQLiteHelper(context: Context):
                 "GROUP BY " + SESSION_ID
         val db = this.readableDatabase
         val cursor: Cursor?
-        cursor = db.rawQuery(selectQuery, null)
-        cursor.moveToFirst()
-        val res = cursor.getLong(0)
-        cursor.close()
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+            cursor.moveToFirst()
+            res = cursor.getLong(0)
+            cursor.close()
+        } catch (_: CursorIndexOutOfBoundsException) {
+            res = 0
+        }
         db.close()
         return res
     }
