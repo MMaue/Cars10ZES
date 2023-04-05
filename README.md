@@ -6,7 +6,7 @@ Cars10ZES is a time tracking application. It should help to keep track of the ti
 
 ## Installation
 
-Download and install the latest Android package [here](https://github.com/MMaue/Cars10ZES/releases).
+Download and install the latest Android package [here](https://github.com/MMaue/Cars10ZES/releases/download/v0.1.8/Cars10ZES_0.1.8.apk).
 
 ## Usage
 
