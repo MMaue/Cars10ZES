@@ -217,12 +217,12 @@ class SQLiteHelper(context: Context):
     }
 
     fun insertPauseEnd(end: String) {
-        val sessionID = getLastSessionID()
+        val pauseID = getLastPauseID()
         val db = this.writableDatabase
 
         val contentValues = ContentValues()
         contentValues.put(PAUSE_END, end)
-        db.update(TABLE_PAUSE, contentValues, SESSION_ID + " = " + sessionID, null)
+        db.update(TABLE_PAUSE, contentValues, PAUSE_ID + " = " + pauseID, null)
         db.close()
     }
 
