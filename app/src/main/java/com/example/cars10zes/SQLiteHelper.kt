@@ -280,7 +280,6 @@ class SQLiteHelper(context: Context):
                 sessionDate = cursor.getString(2)
                 sessionStart = cursor.getString(3)
                 sessionEnd = cursor.getString(4)
-                // java.lang.NullPointerException: cursor.getString(4) must not be null
                 sessionDuration = cursor.getString(5)
                 pauseDuration = cursor.getString(6)
 

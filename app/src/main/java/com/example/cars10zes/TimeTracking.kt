@@ -79,6 +79,7 @@ class TimeTracking(context: Context): Serializable {
     fun endPause() {
         status = 3
         endPauseDatetime = LocalDateTime.now()
+        //TODO startPauseDatetime has not been initialized
         diffPause = Duration.between(startPauseDatetime, endPauseDatetime)
         gesPauseSeconds += diffPause.seconds
         sqliteHelper.insertPauseEnd(endPauseDatetime.format(formatterDB))
