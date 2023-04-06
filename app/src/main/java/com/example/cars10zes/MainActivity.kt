@@ -28,24 +28,13 @@ class MainActivity : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawerLayout)
         val navView : NavigationView = findViewById(R.id.nav_view)
 
-        val timeTracking = TimeTracking(applicationContext)
-        val bundle = Bundle()
-        bundle.putSerializable("data", timeTracking)
-
         val homeFragment = HomeFragment()
-        homeFragment.arguments = bundle
         val historyFragment = HistoryFragment()
-        historyFragment.arguments = bundle
         val calendarFragment = CalendarFragment()
-        calendarFragment.arguments = bundle
         val overviewFragment = OverviewFragment()
-        overviewFragment.arguments = bundle
         val startEndTimesFragment = StartEndTimesFragment()
-        startEndTimesFragment.arguments = bundle
         val newEntryFragment = NewEntryFragment()
-        newEntryFragment.arguments = bundle
         val deleteEntryFragment = DeleteEntryFragment()
-        deleteEntryFragment.arguments = bundle
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open,R.string.close)
         drawerLayout.addDrawerListener(toggle)

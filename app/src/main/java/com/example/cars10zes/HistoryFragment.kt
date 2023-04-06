@@ -19,7 +19,7 @@ class HistoryFragment : Fragment(R.layout.fragment_history) {
         super.onViewCreated(view, savedInstanceState)
         this.activity?.title = getString(R.string.title_history)
 
-        val timeTracking = arguments?.get("data") as TimeTracking
+        val timeTracking = TimeTracking(requireActivity().applicationContext)
 
         val adapter = HistoryAdapter(timeTracking.getHistoryList())
         val recyclerHistory = view.findViewById<RecyclerView>(R.id.recyclerviewHistory)

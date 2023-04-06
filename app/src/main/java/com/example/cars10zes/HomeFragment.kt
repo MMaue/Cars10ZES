@@ -21,7 +21,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         this.activity?.title = getString(R.string.title_home)
 
-        val timeTracking = arguments?.get("data") as TimeTracking
+        val timeTracking = TimeTracking(requireActivity().applicationContext)
 
         val buttonSessionStart = view.findViewById<Button>(R.id.button_session_start)
         val buttonSessionEnd = view.findViewById<Button>(R.id.button_session_end)
