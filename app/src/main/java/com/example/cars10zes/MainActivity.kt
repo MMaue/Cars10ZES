@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun replaceFragment(fragment: Fragment){
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.frameLayout, fragment)
+            replace(R.id.main_constraint_layout, fragment)
             addToBackStack(null)
             commit()
         }
