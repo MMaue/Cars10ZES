@@ -120,6 +120,17 @@ class TimeTracking(context: Context): Serializable {
         return historyList
     }
 
+    fun getOverviewList(): MutableList<OverviewItem> {
+        val overviewList =  sqliteHelper.getOverviewList()
+        for (overviewItem in overviewList) {
+            val projectSec = overviewItem.projectDuration.toLong()
+            val projectPauseSec = overviewItem.projectPauseDuration.toLong()
+            overviewItem.projectDuration = formatDuration(projectSec-projectPauseSec)
+            overviewItem.projectPauseDuration = formatDuration(projectPauseSec)
+        }
+        return overviewList
+    }
+
     fun getLastUser(): String {
         user = sqliteHelper.getLastUser()
         return user
