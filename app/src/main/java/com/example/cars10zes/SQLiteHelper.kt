@@ -388,4 +388,58 @@ class SQLiteHelper(context: Context):
         db.close()
         return res
     }
+
+    fun getOverviewList(): MutableList<OverviewItem> {
+        val overviewList = mutableListOf<OverviewItem>()
+        val selectQuery = "SELECT " + PROJECT_NAME + ", sum(duration_ges), sum(duration_pause) " +
+                "FROM (SELECT " + PROJECT_NAME + ", " +
+                "CASE WHEN " + SESSION_END + " IS NULL " +
+                "THEN 0 " +
+                "ELSE CAST((julianday(" + SESSION_END + ") - julianday(" + SESSION_START + ")) * 24 * 60 * 60 AS INTEGER) " +
+                "END AS duration_ges, " +
+                "CASE WHEN pausetimediff IS NOT NULL " +
+                "THEN CAST(pausetimediff * 24 * 60 * 60 AS INTEGER) " +
+                "ELSE 0 " +
+                "END AS duration_pause " +
+                "FROM " + TABLE_SESSION + " " +
+                "INNER JOIN " + TABLE_PROJECT + " " +
+                "ON " + TABLE_PROJECT + "." + PROJECT_ID + " = " + TABLE_SESSION+ "." + PROJECT_ID + " " +
+                "LEFT JOIN (SELECT " + SESSION_ID + ", " +
+                "sum(julianday(" + PAUSE_END + ") - julianday(" + PAUSE_START + ")) AS pausetimediff " +
+                "FROM " + TABLE_PAUSE + " " +
+                "GROUP BY " + SESSION_ID + ") AS res " +
+                "ON res." + SESSION_ID + " = " + TABLE_SESSION + "." + SESSION_ID + ") AS res " +
+                "GROUP BY " + PROJECT_NAME
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            db.execSQL(selectQuery)
+            return overviewList
+        }
+
+        var projectName: String
+        var projectDuration: String
+        var projectPauseDuration: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                projectName = cursor.getString(0)
+                projectDuration = cursor.getString(1)
+                projectPauseDuration = cursor.getString(2)
+
+                val overviewItem = OverviewItem(
+                    projectName,
+                    projectDuration,
+                    projectPauseDuration)
+                overviewList.add(overviewItem)
+            } while (cursor.moveToNext())
+        }
+
+        return overviewList
+
+    }
 }
