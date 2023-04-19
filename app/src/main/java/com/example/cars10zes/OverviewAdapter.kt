@@ -42,7 +42,7 @@ class OverviewAdapter(
 
                 var max = overviewItems[position].projectDurations[0].sessionDuration-overviewItems[position].projectDurations[0].sessionPauseDuration
                 var min = max
-                var average = max
+                var average = 0
 
                 val barChartEntries = mutableListOf<BarEntry>()
                 for ((i, entry) in overviewItems[position].projectDurations.withIndex()) {
