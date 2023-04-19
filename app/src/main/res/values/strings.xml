@@ -26,5 +26,8 @@
     <string name="title_version">Version</string>
     <string name="title_sourcecode" translatable="false">Source Code</string>
     <string name="source_code_link" translatable="false">https://github.com/MMaue/Cars10ZES</string>
+    <string name="max">max:</string>
+    <string name="min">min:</string>
+    <string name="average">average:</string>
 
 </resources>

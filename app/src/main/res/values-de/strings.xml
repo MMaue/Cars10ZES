@@ -7,8 +7,8 @@
     <string name="title_home">Zeiterfassung</string>
     <string name="button_home_start">Start</string>
     <string name="button_home_end">Ende</string>
-    <string name="text_home_session">session:</string>
-    <string name="text_home_pause">pause:</string>
+    <string name="text_home_session">Session:</string>
+    <string name="text_home_pause">Pause:</string>
     <string name="hint_home_user">Name</string>
     <string name="hint_home_project">Projekt</string>
     <string name="text_home_time_default">Zeit</string>
@@ -23,4 +23,7 @@
     <string name="title_group_info">Informationen</string>
     <string name="title_version">Version</string>
     <string name="toast_home_missing_data">Bitte Projekt und Name eingeben</string>
+    <string name="max">Max:</string>
+    <string name="min">Min:</string>
+    <string name="average">Mittelwert:</string>
 </resources>
