@@ -7,7 +7,7 @@ Cars10ZES is a time tracking application. It should help to keep track of the ti
 
 ## Installation
 
-Download and install the latest Android package [here](https://github.com/MMaue/Cars10ZES/releases/download/v0.2.0/Cars10ZES_0.2.0.apk).
+Download and install the latest Android package [here](https://github.com/MMaue/Cars10ZES/releases/download/v0.2.2/Cars10ZES_0.2.2.apk).
 
 ## Usage
 
@@ -19,8 +19,8 @@ To start a work session, you need to tap the start button, after which the app c
 - [x] storing work sessions in a local database
 - [x] history view showing all of the projects you worked on
 - [ ] calendar view
-- [ ] overview page
-  - [ ] average, min and max time of one session
+- [x] overview page
+  - [x] average, min and max time of one session
   - [x] overall time spend on a project
 - [ ] graph view of the start and end times
 - [ ] manual addition, modification, deletion of entries
