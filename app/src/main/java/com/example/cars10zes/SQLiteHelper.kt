@@ -148,6 +148,59 @@ class SQLiteHelper(context: Context):
         return projectID
     }
 
+    private fun getProjectDurations(projectName: String): MutableList<ProjectDuration>{
+        val projectDurationList = mutableListOf<ProjectDuration>()
+        val selectQuery = "SELECT " +
+                "date(" + SESSION_START + ") AS startdate, " +
+                "CASE WHEN " + SESSION_END + " IS NULL " +
+                "THEN 0 " +
+                "ELSE CAST((julianday(" + SESSION_END + ") - julianday(" + SESSION_START + ")) * 24 * 60 * 60 AS INTEGER) " +
+                "END AS duration_ges, " +
+                "CASE WHEN pausetimediff IS NOT NULL " +
+                "THEN CAST(pausetimediff * 24 * 60 * 60 AS INTEGER) " +
+                "ELSE 0 " +
+                "END AS duration_pause " +
+                "FROM " + TABLE_SESSION + " " +
+                "LEFT JOIN (SELECT " + SESSION_ID + ", " +
+                "sum(julianday(" + PAUSE_END + ") - julianday(" + PAUSE_START + ")) AS pausetimediff " +
+                "FROM " + TABLE_PAUSE + " " +
+                "GROUP BY " + SESSION_ID + ") AS res " +
+                "ON res." + SESSION_ID + " = " + TABLE_SESSION + "." + SESSION_ID + " " +
+                "WHERE " + TABLE_SESSION + "." + PROJECT_ID + "=" + getProjectID(projectName) + " " +
+                "ORDER BY " + TABLE_SESSION + "." + SESSION_START + " DESC"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            db.execSQL(selectQuery)
+            return projectDurationList
+        }
+
+        var sessionStartDate: String
+        var sessionDuration: Int
+        var sessionPauseDuration: Int
+
+        if (cursor.moveToFirst()) {
+            do {
+                sessionStartDate = cursor.getString(0)
+                sessionDuration = cursor.getInt(1)
+                sessionPauseDuration = cursor.getInt(2)
+
+                val durationItem = ProjectDuration(
+                    sessionStartDate,
+                    sessionDuration,
+                    sessionPauseDuration)
+                projectDurationList.add(durationItem)
+            } while (cursor.moveToNext())
+        }
+
+        return projectDurationList
+
+    }
+
     private fun getLastSessionID(): Int {
         val selectQuery = "SELECT seq FROM sqlite_sequence " +
                 "WHERE name=\"" + TABLE_SESSION + "\""
@@ -424,17 +477,20 @@ class SQLiteHelper(context: Context):
         var projectName: String
         var projectDuration: String
         var projectPauseDuration: String
+        var projectDurations: MutableList<ProjectDuration>
 
         if (cursor.moveToFirst()) {
             do {
                 projectName = cursor.getString(0)
                 projectDuration = cursor.getString(1)
                 projectPauseDuration = cursor.getString(2)
+                projectDurations = getProjectDurations(projectName)
 
                 val overviewItem = OverviewItem(
                     projectName,
                     projectDuration,
-                    projectPauseDuration)
+                    projectPauseDuration,
+                    projectDurations)
                 overviewList.add(overviewItem)
             } while (cursor.moveToNext())
         }
