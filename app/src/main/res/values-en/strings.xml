@@ -23,4 +23,11 @@
     <string name="title_group_info">information</string>
     <string name="title_version">version</string>
     <string name="toast_home_missing_data">please insert name and project</string>
+    <string name="mo">Mon</string>
+    <string name="di">Tue</string>
+    <string name="mi">Wed</string>
+    <string name="don">Thur</string>
+    <string name="fr">Fri</string>
+    <string name="sa">Sat</string>
+    <string name="so">Sun</string>
 </resources>

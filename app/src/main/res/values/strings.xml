@@ -29,5 +29,12 @@
     <string name="max">max:</string>
     <string name="min">min:</string>
     <string name="average">average:</string>
+    <string name="mo">Mo.</string>
+    <string name="di">Di.</string>
+    <string name="mi">Mi.</string>
+    <string name="don">Do.</string>
+    <string name="fr">Fr.</string>
+    <string name="sa">Sa.</string>
+    <string name="so">So.</string>
 
 </resources>
