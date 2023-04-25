@@ -229,6 +229,28 @@ class SQLiteHelper(context: Context):
 
         return projectList
     }
+
+    fun sessionFoundOn(date: String, projectName: String): Boolean {
+        var foundBool = false
+        val selectQuery = "SELECT EXISTS (SELECT 1 " +
+                "FROM " + TABLE_SESSION + " " +
+                "INNER JOIN " + TABLE_PROJECT + " " +
+                "ON " + TABLE_PROJECT + "." + PROJECT_ID + " = " + TABLE_SESSION + "." + PROJECT_ID + " " +
+                "WHERE date(" + SESSION_START + ")='" + date + "' " +
+                "AND " + PROJECT_NAME + "='" + projectName + "')"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+        cursor = db.rawQuery(selectQuery, null)
+        cursor.moveToFirst()
+        val found = cursor.getInt(0)
+        cursor.close()
+        db.close()
+        if (found == 1) {
+            foundBool = true
+        }
+        return foundBool
+    }
+
     private fun getLastSessionID(): Int {
         val selectQuery = "SELECT seq FROM sqlite_sequence " +
                 "WHERE name=\"" + TABLE_SESSION + "\""
