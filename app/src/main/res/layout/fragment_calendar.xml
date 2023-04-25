@@ -66,7 +66,7 @@
         android:layout_marginTop="15dp"
         android:text="Mo."
         android:textAlignment="center"
-        android:textColor="@color/blue_2_darker"
+        android:textColor="@color/text_1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view5"
         app:layout_constraintWidth_percent="0.142" />
@@ -77,7 +77,7 @@
         android:layout_height="wrap_content"
         android:text="Di."
         android:textAlignment="center"
-        android:textColor="@color/blue_2_darker"
+        android:textColor="@color/text_1"
         app:layout_constraintStart_toEndOf="@+id/text_day_mo"
         app:layout_constraintTop_toTopOf="@+id/text_day_mo"
         app:layout_constraintWidth_percent="0.142"/>
@@ -88,7 +88,7 @@
         android:layout_height="wrap_content"
         android:text="Mi."
         android:textAlignment="center"
-        android:textColor="@color/blue_2_darker"
+        android:textColor="@color/text_1"
         app:layout_constraintStart_toEndOf="@+id/text_day_di"
         app:layout_constraintTop_toTopOf="@+id/text_day_mo"
         app:layout_constraintWidth_percent="0.142"/>
@@ -99,7 +99,7 @@
         android:layout_height="wrap_content"
         android:text="Do."
         android:textAlignment="center"
-        android:textColor="@color/blue_2_darker"
+        android:textColor="@color/text_1"
         app:layout_constraintStart_toEndOf="@+id/text_day_mi"
         app:layout_constraintTop_toTopOf="@+id/text_day_mo"
         app:layout_constraintWidth_percent="0.142"/>
@@ -110,7 +110,7 @@
         android:layout_height="wrap_content"
         android:text="Fr."
         android:textAlignment="center"
-        android:textColor="@color/blue_2_darker"
+        android:textColor="@color/text_1"
         app:layout_constraintStart_toEndOf="@+id/text_day_do"
         app:layout_constraintTop_toTopOf="@+id/text_day_mo"
         app:layout_constraintWidth_percent="0.142"/>
@@ -121,7 +121,7 @@
         android:layout_height="wrap_content"
         android:text="Sa."
         android:textAlignment="center"
-        android:textColor="@color/blue_2_darker"
+        android:textColor="@color/text_1"
         app:layout_constraintStart_toEndOf="@+id/text_day_fr"
         app:layout_constraintTop_toTopOf="@+id/text_day_mo"
         app:layout_constraintWidth_percent="0.142"/>
@@ -132,7 +132,7 @@
         android:layout_height="wrap_content"
         android:text="So."
         android:textAlignment="center"
-        android:textColor="@color/blue_2_darker"
+        android:textColor="@color/text_1"
         app:layout_constraintStart_toEndOf="@+id/text_day_sa"
         app:layout_constraintTop_toTopOf="@+id/text_day_mo"
         app:layout_constraintWidth_percent="0.142" />
