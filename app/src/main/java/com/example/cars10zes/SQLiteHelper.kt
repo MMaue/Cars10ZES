@@ -57,11 +57,13 @@ class SQLiteHelper(context: Context):
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        /*
         db!!.execSQL("DROP TABLE IF EXISTS " + TABLE_USER)
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROJECT)
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SESSION)
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PAUSE)
         onCreate(db)
+        */
     }
 
     fun insertSessionStart(user: String,
