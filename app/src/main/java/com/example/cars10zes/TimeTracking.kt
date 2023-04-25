@@ -5,7 +5,9 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import java.io.Serializable
 import java.time.Duration
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
 
@@ -20,12 +22,17 @@ class TimeTracking(context: Context): Serializable {
     private lateinit var diffPause: Duration
     private val formatter = DateTimeFormatter.ofPattern("HH:mm")
     private val formatterDB = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+    private val formatterCal = DateTimeFormatter.ofPattern("MMMM yyyy")
+
     private var gesPauseSeconds: Long = 0
     var status = 0
 
     private val sqliteHelper: SQLiteHelper = SQLiteHelper(context)
     private lateinit var user: String
     private lateinit var project: String
+
+    var selectedDate = LocalDate.now()
+    lateinit var selectedProject: String
 
     fun startSession(user: String, project: String) {
         status = 1
@@ -129,6 +136,42 @@ class TimeTracking(context: Context): Serializable {
             overviewItem.projectPauseDuration = formatDuration(projectPauseSec)
         }
         return overviewList
+    }
+
+    fun getDaysOfMonth(): ArrayList<CalendarItem> {
+        val calendarItems = ArrayList<CalendarItem>()
+        val yearMonth = YearMonth.from(selectedDate)
+        val daysInMonth = yearMonth.lengthOfMonth()
+        val firstOfMonth = selectedDate.withDayOfMonth(1)
+        val dayOfWeek = firstOfMonth.dayOfWeek.value-1
+
+        for (i in 1..42) {
+            if (i <= dayOfWeek || i > daysInMonth + dayOfWeek) {
+                calendarItems.add(CalendarItem(
+                    "",
+                    "",
+                    false
+                ))
+            } else {
+                val dayOfMonth = i-dayOfWeek
+                val dateString = selectedDate.withDayOfMonth(dayOfMonth).toString()
+                calendarItems.add(
+                    CalendarItem(
+                        dayOfMonth.toString(),
+                        dateString,
+                        sqliteHelper.sessionFoundOn(dateString, selectedProject)
+                ))
+            }
+        }
+        return calendarItems
+    }
+
+    fun getCalendarDate(): String {
+        return selectedDate.format(formatterCal)
+    }
+
+    fun getProjectsList(): ArrayList<String> {
+        return sqliteHelper.getProjectsList()
     }
 
     fun getLastUser(): String {
