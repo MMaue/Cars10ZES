@@ -203,6 +203,32 @@ class SQLiteHelper(context: Context):
 
     }
 
+    fun getProjectsList(): ArrayList<String> {
+        val projectList = ArrayList<String>()
+        val selectQuery = "SELECT DISTINCT " + PROJECT_NAME + " " +
+                "FROM " + TABLE_SESSION + " " +
+                "INNER JOIN " + TABLE_PROJECT + " " +
+                "ON " + TABLE_PROJECT + "." + PROJECT_ID + " = " + TABLE_SESSION + "." + PROJECT_ID + " " +
+                "ORDER BY " + TABLE_SESSION + "." + SESSION_START + " DESC"
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            db.execSQL(selectQuery)
+            return projectList
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+                projectList.add(cursor.getString(0))
+            } while (cursor.moveToNext())
+        }
+
+        return projectList
+    }
     private fun getLastSessionID(): Int {
         val selectQuery = "SELECT seq FROM sqlite_sequence " +
                 "WHERE name=\"" + TABLE_SESSION + "\""
