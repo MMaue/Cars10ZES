@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class HistoryAdapter(
     var historyItems: List<HistoryItem>
-) : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+    ) : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
     inner class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
