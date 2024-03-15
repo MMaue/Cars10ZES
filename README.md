@@ -3,7 +3,14 @@
 ![GitHub License](https://img.shields.io/github/license/MMaue/Cars10ZES)
 ![GitHub Release](https://img.shields.io/github/v/release/MMaue/Cars10ZES?include_prereleases&sort=semver)
 
-Cars10ZES is a time tracking application. It should help to keep track of the time spent on private projects. There is a basic functionality to track the time of a work session including one or multiple pauses. The times are stored in a local database. One goal of this project is to keep it easy to use and not keep you from your work.
+<div style="display: flex; align-items: center;">
+  <div style="flex: 1; padding: 20px;">
+    <p>Cars10ZES is a time tracking application. It should help to keep track of the time spent on private projects. There is a basic functionality to track the time of a work session including one or multiple pauses. The times are stored in a local database. One goal of this project is to keep it easy to use and not keep you from your work.</p>
+  </div>
+  <div style="flex: 1; padding: 20px;">
+    <img src="screenshot.gif" alt="Your GIF" style="max-width: 100%; height: auto;">
+  </div>
+</div>
 
 ## Installation
 
